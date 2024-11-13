@@ -10,6 +10,7 @@ import { database, storage } from "../../../firebase";
 import { addDoc, collection } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { Image as ImageSvg, Svg } from "react-native-svg";
+import { useColorScheme } from "nativewind";
 
 export default function MapPage() {
     const [imagePath, setImagePath] = React.useState<string[]>([]);
@@ -17,6 +18,7 @@ export default function MapPage() {
     const [region, setRegion] = React.useState<IRegion | undefined>(undefined);
     const [values, error] = useCollection(collection(database, "markers"));
     const markers = values?.docs.map((doc) => ({ ...doc.data() })) as IMarker[];
+    const color = useColorScheme().colorScheme;
 
     React.useEffect(() => {
         // Sætter din start region til din lokation.
@@ -96,7 +98,7 @@ export default function MapPage() {
             {loading ? (
                 <ActivityIndicator className="flex-1" size="large" />
             ) : (
-                <MapView region={region} showsUserLocation onLongPress={handleLongPress} className="w-full h-full">
+                <MapView userInterfaceStyle={color} region={region} showsUserLocation onLongPress={handleLongPress} className="w-full h-full">
                     {markers?.map((marker) => (
                         <Marker coordinate={{ ...marker.coordinate }} key={marker.key}>
                             <Callout>

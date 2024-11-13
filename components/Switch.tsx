@@ -6,8 +6,8 @@ interface Props extends SwitchProps {}
 
 export const DarkModeSwitch = (props: Props) => {
     // Du skal stadig style med dark: i className
-    const [isEnabled, setIsEnabled] = React.useState(false);
-    const { toggleColorScheme } = useColorScheme();
+    const { toggleColorScheme, colorScheme } = useColorScheme();
+    const [isEnabled, setIsEnabled] = React.useState(colorScheme === "dark");
 
     const toggleSwitch = () => {
         setIsEnabled((previousState) => !previousState);

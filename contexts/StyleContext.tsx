@@ -1,6 +1,5 @@
 import React from "react";
-import { useColorScheme } from "react-native";
-
+import { useColorScheme } from "nativewind";
 type TStyle = { backgroundColor: string; textStyle?: string; restaurantCardStyle?: string; tabBackground?: string };
 
 type StyleContextType = {
@@ -10,7 +9,7 @@ type StyleContextType = {
 const StyleContext = React.createContext<StyleContextType>(null!);
 
 export default function StyleProvider(props: { children: React.ReactNode }) {
-    const colorScheme = useColorScheme();
+    const { colorScheme } = useColorScheme();
 
     const lightTheme: TStyle = {
         backgroundColor: "bg-slate-100",

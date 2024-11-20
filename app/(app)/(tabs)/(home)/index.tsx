@@ -9,6 +9,7 @@ import { TaleGridItem, TaleListItem } from "../../../../components/Tale";
 import { CircleIcon } from "../../../../components/Input";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import React from "react";
+import { FlatList } from "react-native-gesture-handler";
 
 const tales: ITale[] = [
     {
@@ -86,7 +87,7 @@ const tales: ITale[] = [
 export default function HomePage() {
     const { user } = useAuth();
     const router = useRouter();
-    const [display, setDisplay] = React.useState<"list" | "grid">("list");
+    const [display, setDisplay] = React.useState<"list" | "grid">("grid");
     const [values, loading, error] = useCollection(collection(database, `${user!.uid}`));
     // const tales = values?.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as ITale[];
 
@@ -109,19 +110,27 @@ export default function HomePage() {
         //TODO: Launch camera with location rights.
     };
 
-    const displayIcon = display === "list" ? "list" : "th-large";
+    const displayIcon = display === "list" ? "th-list" : "th-large";
 
     return (
         <View className="flex-1">
-            <ScrollView className="iflex-1">
-                {tales?.map((tale) =>
-                    display === "list" ? (
-                        <TaleListItem key={tale.id} tale={tale} onSwipeRight={handleDelete} onPress={handleNavigate} />
-                    ) : (
-                        <TaleGridItem key={tale.id} tale={tale} />
-                    ),
-                )}
-            </ScrollView>
+            {display === "list" ? (
+                <ScrollView className="flex-1">
+                    {tales?.map((tale) => <TaleListItem key={tale.id} tale={tale} onSwipeRight={handleDelete} onPress={handleNavigate} />)}
+                </ScrollView>
+            ) : (
+                <FlatList
+                    columnWrapperStyle={{
+                        justifyContent: "space-evenly",
+                        marginTop: 10,
+                    }}
+                    data={tales}
+                    numColumns={2}
+                    renderItem={({ item }) => <TaleGridItem key={item.id} tale={item} />}
+                    keyExtractor={(item) => item.id}
+                />
+            )}
+
             <View className="absolute bottom-2 right-0">
                 <CircleIcon onPress={handleChangeDisplay}>
                     <FontAwesome size={28} name={displayIcon} />
@@ -133,3 +142,4 @@ export default function HomePage() {
         </View>
     );
 }
+            

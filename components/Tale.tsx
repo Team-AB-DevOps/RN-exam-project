@@ -10,16 +10,18 @@ interface TaleDisplayProps extends ViewProps {
 
 export const TaleListItem = (props: TaleDisplayProps) => {
     return (
-        <View {...props} className="border justify-center py-5 px-2 m-2">
-            <Text>{props.tale.title}</Text>
+        <View {...props} className="border rounded-md m-2 p-4">
+            <Text className="font-semibold">{props.tale.title}</Text>
+            <Text className="text-sm text-gray-600">{props.tale.description}</Text>
         </View>
     );
 };
 
 export const TaleGridItem = (props: TaleDisplayProps) => {
     return (
-        <View>
-            <Text>TaleGridItem</Text>
+        <View {...props} className="border rounded-md p-2 w-[47%]">
+            <Text className="font-semibold">{props.tale.title}</Text>
+            <Text className="text-sm text-gray-600">{props.tale.description}</Text>
         </View>
     );
 };

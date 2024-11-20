@@ -38,22 +38,4 @@ export const MyTextInput = (props: CustomTextInputProps) => {
     );
 };
 
-interface CircleIconProps extends ViewProps {
-    children: React.ReactNode;
-    onPress: () => void;
-}
 
-export const CircleIcon = (props: CircleIconProps) => {
-    const { theme } = useStyling();
-
-    return (
-        <View
-            {...props}
-            onTouchEnd={props.onPress}
-            style={{ backgroundColor: theme.tabBackground }}
-            className="flex mx-5 my-3 justify-center items-center w-20 h-20 border rounded-full"
-        >
-            {props.children}
-        </View>
-    );
-};

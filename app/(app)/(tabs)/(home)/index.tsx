@@ -6,10 +6,10 @@ import { useAuth } from "../../../../contexts/AuthContext";
 import ITale from "../../../../models/Tale";
 import { useRouter } from "expo-router";
 import { TaleGridItem, TaleListItem } from "../../../../components/Tale";
-import { CircleIcon } from "../../../../components/Input";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import React from "react";
 import { FlatList } from "react-native-gesture-handler";
+import { CircleIconButton } from "../../../../components/Button";
 
 const tales: ITale[] = [
     {
@@ -82,6 +82,13 @@ const tales: ITale[] = [
         date: new Date("2024-06-15"),
         coordinate: { latitude: -33.8688, longitude: 151.2093 },
     },
+    {
+        id: "11",
+        title: "Test Test Test",
+        description: "SHEIKMNIK.",
+        date: new Date("2024-06-15"),
+        coordinate: { latitude: -33.8688, longitude: 151.2093 },
+    },
 ];
 
 export default function HomePage() {
@@ -122,7 +129,7 @@ export default function HomePage() {
                 <FlatList
                     columnWrapperStyle={{
                         justifyContent: "space-evenly",
-                        marginTop: 10,
+                        marginTop: "2%",
                     }}
                     data={tales}
                     numColumns={2}
@@ -131,13 +138,13 @@ export default function HomePage() {
                 />
             )}
 
-            <View className="absolute bottom-2 right-0">
-                <CircleIcon onPress={handleChangeDisplay}>
+            <View className="absolute bottom-3 right-0">
+                <CircleIconButton onPress={handleChangeDisplay}>
                     <FontAwesome size={28} name={displayIcon} />
-                </CircleIcon>
-                <CircleIcon onPress={handleCamera}>
+                </CircleIconButton>
+                <CircleIconButton onPress={handleCamera}>
                     <FontAwesome size={28} name="plus" />
-                </CircleIcon>
+                </CircleIconButton>
             </View>
         </View>
     );

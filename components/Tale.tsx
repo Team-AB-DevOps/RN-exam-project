@@ -26,7 +26,13 @@ export const TaleGridItem = (props: TaleDisplayProps) => {
     );
 };
 
-export const DetailedTale = () => {
+interface DetailedTaleProps {
+    tale: ITale;
+}
+
+export const DetailedTale = (props: DetailedTaleProps) => {
+    const [tale, setTale] = React.useState<ITale>(props.tale);
+
     return (
         <View>
             <Text>DetailedTale</Text>

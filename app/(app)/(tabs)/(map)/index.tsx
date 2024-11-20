@@ -1,12 +1,12 @@
 import React from "react";
 import { ActivityIndicator, View } from "react-native";
 import MapView, { Callout, LongPressEvent, Marker } from "react-native-maps";
-import IRegion from "../../../models/Region";
-import IMarker from "../../../models/Marker";
+import IRegion from "../../../../models/Region";
+import IMarker from "../../../../models/Marker";
 import * as Location from "expo-location";
 import * as ImagePicker from "expo-image-picker";
 import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
-import { database, storage } from "../../../firebase";
+import { database, storage } from "../../../../firebase";
 import { addDoc, collection } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { Image as ImageSvg, Svg } from "react-native-svg";

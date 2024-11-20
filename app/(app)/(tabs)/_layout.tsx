@@ -1,6 +1,6 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
-import { useStyling } from "../../contexts/StyleContext";
+import { useStyling } from "../../../contexts/StyleContext";
 
 // Vi fortæller hvordan vores tab naviagtion skal se ud.
 export default function TabLayout() {
@@ -26,14 +26,6 @@ export default function TabLayout() {
                 options={{
                     title: "Map",
                     tabBarIcon: ({ color }) => <FontAwesome size={28} name="map-marker" color={color} />,
-                    headerShown: false,
-                }}
-            />
-            <Tabs.Screen
-                name="user"
-                options={{
-                    title: "Profile",
-                    tabBarIcon: ({ color }) => <FontAwesome size={28} name="user" color={color} />,
                     headerShown: false,
                 }}
             />

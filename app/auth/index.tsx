@@ -1,6 +1,6 @@
 import { Button, Text, View } from "react-native";
 import React from "react";
-import { auth } from "../../../firebase";
+import { auth } from "../../firebase";;
 import { useRouter } from "expo-router";
 import { onAuthStateChanged } from "firebase/auth";
 

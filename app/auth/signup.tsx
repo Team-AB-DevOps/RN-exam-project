@@ -1,6 +1,6 @@
 import { Button, Text, TextInput, View } from "react-native";
 import React from "react";
-import { auth } from "../../../firebase";
+import { auth } from "../../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "expo-router";
 

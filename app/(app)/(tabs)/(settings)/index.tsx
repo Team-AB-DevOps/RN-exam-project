@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { DarkModeSwitch } from "../../../components/Switch";
+import { DarkModeSwitch } from "../../../../components/Switch";
 
 export default function SettingsPage() {
     return (

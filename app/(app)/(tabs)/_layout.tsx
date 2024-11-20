@@ -1,10 +1,12 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
-import { useStyling } from "../../contexts/StyleContext";
+import { useStyling } from "../../../contexts/StyleContext";
+import { useAuth } from "../../../contexts/AuthContext";
 
 // Vi fortæller hvordan vores tab naviagtion skal se ud.
 export default function TabLayout() {
     const { theme } = useStyling();
+    const { user } = useAuth();
 
     return (
         <Tabs
@@ -15,13 +17,6 @@ export default function TabLayout() {
             }}
         >
             <Tabs.Screen
-                name="(home)"
-                options={{
-                    title: "Home",
-                    tabBarIcon: ({ color }) => <FontAwesome size={28} name="home" color={color} />,
-                }}
-            />
-            <Tabs.Screen
                 name="(map)"
                 options={{
                     title: "Map",
@@ -30,11 +25,10 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name="user"
+                name="(home)"
                 options={{
-                    title: "Profile",
-                    tabBarIcon: ({ color }) => <FontAwesome size={28} name="user" color={color} />,
-                    headerShown: false,
+                    title: "Home",
+                    tabBarIcon: ({ color }) => <FontAwesome size={28} name="home" color={color} />,
                 }}
             />
             <Tabs.Screen

@@ -1,7 +1,6 @@
 import { Redirect, Stack } from "expo-router";
 import { useAuth } from "../../contexts/AuthContext";
 import React from "react";
-import { View, Text } from "react-native";
 import { Loading } from "../../components/Loading";
 
 

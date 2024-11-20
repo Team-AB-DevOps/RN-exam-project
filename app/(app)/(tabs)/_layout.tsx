@@ -1,12 +1,10 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
 import { useStyling } from "../../../contexts/StyleContext";
-import { useAuth } from "../../../contexts/AuthContext";
 
 // Vi fortæller hvordan vores tab naviagtion skal se ud.
 export default function TabLayout() {
     const { theme } = useStyling();
-    const { user } = useAuth();
 
     return (
         <Tabs

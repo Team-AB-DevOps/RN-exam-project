@@ -1,14 +1,13 @@
 import React from "react";
 import { auth } from "../firebase";
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, User } from "@firebase/auth";
-import { useRouter } from "expo-router";
 
 type AuthContextType = {
     user: User | null;
     isLoading: boolean;
     signOut: () => void;
-    login: (email: string, password: string) => void;
-    signUp: (email: string, password: string) => void;
+    login: (email: string, password: string) => Promise<boolean>;
+    signUp: (email: string, password: string) => Promise<boolean>;
 };
 
 const AuthContext = React.createContext<AuthContextType>(null!);
@@ -16,13 +15,11 @@ const AuthContext = React.createContext<AuthContextType>(null!);
 export function AuthProvider(props: { children: React.ReactNode }) {
     const [user, setUser] = React.useState(auth.currentUser);
     const [isLoading, setIsLoading] = React.useState(false);
-    const router = useRouter();
 
     console.log(user);
 
     onAuthStateChanged(auth, (user) => {
         setUser(user);
-        router.replace("/");
     });
 
     const signOut = async () => {
@@ -32,8 +29,8 @@ export function AuthProvider(props: { children: React.ReactNode }) {
     const login = async (email: string, password: string) => {
         try {
             setIsLoading(true);
-            const userCreds = await signInWithEmailAndPassword(auth, email, password);
-            setUser(userCreds.user);
+            await signInWithEmailAndPassword(auth, email, password);
+            return true;
         } catch (error) {
             console.log("Could not login: " + error);
             throw error;
@@ -44,10 +41,14 @@ export function AuthProvider(props: { children: React.ReactNode }) {
 
     const signUp = async (email: string, password: string) => {
         try {
-            const userCreds = await createUserWithEmailAndPassword(auth, email, password);
-            setUser(userCreds.user);
+            setIsLoading(true);
+            await createUserWithEmailAndPassword(auth, email, password);
+            return true;
         } catch (error) {
             console.log("Could not signup: " + error);
+            throw error;
+        } finally {
+            setIsLoading(false);
         }
     };
 

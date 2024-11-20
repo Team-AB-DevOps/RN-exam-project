@@ -19,7 +19,6 @@ export default function LoginPage() {
         try {
             auth.login(login.email, login.password);
             setLogin(INIT_FORM);
-            // router.replace("/");
         } catch (error) {
             console.log("Could not login user" + error);
         }

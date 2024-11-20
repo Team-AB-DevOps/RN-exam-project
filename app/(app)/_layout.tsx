@@ -1,10 +1,12 @@
 import { Redirect, Stack } from "expo-router";
 import { useAuth } from "../../contexts/AuthContext";
 import React from "react";
+import { View, Text } from "react-native";
 import { Loading } from "../../components/Loading";
 
 
-export default async function AppLayout() {
+// Vi fortæller, at vores root layout består af tabs
+export default function AppLayout() {
     const auth = useAuth();
 
     if (auth.isLoading) {

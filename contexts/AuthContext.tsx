@@ -36,6 +36,7 @@ export function AuthProvider(props: { children: React.ReactNode }) {
             setUser(userCreds.user);
         } catch (error) {
             console.log("Could not login: " + error);
+            throw error;
         } finally {
             setIsLoading(false);
         }

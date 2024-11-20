@@ -7,27 +7,18 @@ export default function TabLayout() {
     const { theme } = useStyling();
 
     return (
-        <Tabs screenOptions={{ tabBarActiveTintColor: "blue", tabBarStyle: {backgroundColor: theme.tabBackground}, headerStyle: {backgroundColor: theme.tabBackground} }}>
+        <Tabs
+            screenOptions={{
+                tabBarActiveTintColor: "blue",
+                tabBarStyle: { backgroundColor: theme.tabBackground },
+                headerStyle: { backgroundColor: theme.tabBackground },
+            }}
+        >
             <Tabs.Screen
                 name="(home)"
                 options={{
                     title: "Home",
                     tabBarIcon: ({ color }) => <FontAwesome size={28} name="home" color={color} />,
-                }}
-            />
-            <Tabs.Screen
-                name="restaurants"
-                options={{
-                    title: "Restaurants",
-                    tabBarIcon: ({ color }) => <FontAwesome size={28} name="search" color={color} />,
-                    headerShown: false,
-                }}
-            />
-            <Tabs.Screen
-                name="(images)"
-                options={{
-                    title: "Images",
-                    tabBarIcon: ({ color }) => <FontAwesome size={28} name="image" color={color} />,
                 }}
             />
             <Tabs.Screen
@@ -43,6 +34,14 @@ export default function TabLayout() {
                 options={{
                     title: "Profile",
                     tabBarIcon: ({ color }) => <FontAwesome size={28} name="user" color={color} />,
+                    headerShown: false,
+                }}
+            />
+            <Tabs.Screen
+                name="(settings)"
+                options={{
+                    title: "Settings",
+                    tabBarIcon: ({ color }) => <FontAwesome size={28} name="cog" color={color} />,
                     headerShown: false,
                 }}
             />

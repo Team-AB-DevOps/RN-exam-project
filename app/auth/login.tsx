@@ -3,6 +3,7 @@ import React from "react";
 import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "expo-router";
+import { useAuth } from "../../contexts/AuthContext";
 
 const INIT_FORM = {
     email: "",
@@ -12,12 +13,13 @@ const INIT_FORM = {
 export default function LoginPage() {
     const [login, setLogin] = React.useState(INIT_FORM);
     const router = useRouter();
+    const auth = useAuth();
 
     const onLogin = async () => {
         try {
-            await signInWithEmailAndPassword(auth, login.email, login.password);
+            auth.login(login.email, login.password);
             setLogin(INIT_FORM);
-            router.back();
+            // router.replace("/");
         } catch (error) {
             console.log("Could not login user" + error);
         }

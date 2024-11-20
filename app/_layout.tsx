@@ -11,8 +11,8 @@ export default function RootLayout() {
             <StyleProvider>
                 <GestureHandlerRootView className="flex-1">
                     <Stack>
-                        <Stack.Screen name="(app)" options={{ headerShown: false }} />
                         <Stack.Screen name="auth" options={{ headerShown: false }} />
+                        <Stack.Screen name="(app)" options={{ headerShown: false }} />
                     </Stack>
                 </GestureHandlerRootView>
             </StyleProvider>

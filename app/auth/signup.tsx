@@ -3,6 +3,7 @@ import React from "react";
 import { auth } from "../../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "expo-router";
+import { useAuth } from "../../contexts/AuthContext";
 
 const INIT_FORM = {
     email: "",
@@ -11,14 +12,14 @@ const INIT_FORM = {
 
 export default function SignupPage() {
     const [signup, setSignup] = React.useState(INIT_FORM);
+    const auth = useAuth();
     const router = useRouter();
 
     const onSignup = async () => {
         try {
-            const userCredentials = await createUserWithEmailAndPassword(auth, signup.email, signup.password);
-            //userCredentials.user
+            auth.signUp(signup.email, signup.password);
             setSignup(INIT_FORM);
-            router.back();
+            // router.replace("/")
         } catch (error) {
             console.log("Could not sign up user" + error);
         }

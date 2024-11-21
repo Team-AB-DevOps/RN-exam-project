@@ -19,7 +19,7 @@ interface CustomTextInputProps extends TextInputProps {
 }
 
 export const MyTextInput = (props: CustomTextInputProps) => {
-    const {theme} = useStyling();
+    const { theme } = useStyling();
 
     const changeInput = (value: string) => {
         props.onChangeText?.(value);
@@ -28,7 +28,12 @@ export const MyTextInput = (props: CustomTextInputProps) => {
     return (
         <>
             {props.label && <Label text={props.label} />}
-            <TextInput {...props} style={{color: theme.textStyle, backgroundColor: theme.tabBackground}} className={combineClass("border p-3 m-3", props.className)} onChangeText={changeInput} />
+            <TextInput
+                {...props}
+                style={{ color: theme.textStyle, backgroundColor: theme.tabBackground }}
+                className={combineClass("border p-3 m-3 w-56 rounded-md", props.className)}
+                onChangeText={changeInput}
+            />
         </>
     );
 };

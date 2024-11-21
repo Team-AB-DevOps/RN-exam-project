@@ -2,6 +2,12 @@ import { Stack } from "expo-router/stack";
 import StyleProvider from "../contexts/StyleContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AuthProvider } from "../contexts/AuthContext";
+import * as SplashScreen from "expo-splash-screen";
+
+SplashScreen.setOptions({
+    duration: 1000,
+    fade: true,
+});
 
 // Vi fortæller, at vores root layout består af tabs
 export default function RootLayout() {

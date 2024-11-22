@@ -11,12 +11,12 @@ export default function UserLayout() {
                     headerShown: false
                 }}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
                 name="login"
                 options={{
                     title: "Login User",
                 }}
-            />
+            /> */}
             <Stack.Screen
                 name="signup"
                 options={{

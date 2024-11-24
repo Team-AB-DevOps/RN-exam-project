@@ -1,4 +1,4 @@
-import { Text, TextInput, TextInputProps } from "react-native";
+import { Text, TextInput, TextInputProps, View, ViewProps } from "react-native";
 import React from "react";
 import { useStyling } from "../contexts/StyleContext";
 
@@ -31,9 +31,13 @@ export const MyTextInput = (props: CustomTextInputProps) => {
             <TextInput
                 {...props}
                 style={{ color: theme.textStyle, backgroundColor: theme.tabBackground }}
+
                 className={combineClass("border p-3 m-3 w-56 rounded-md", props.className)}
+
                 onChangeText={changeInput}
             />
         </>
     );
 };
+
+

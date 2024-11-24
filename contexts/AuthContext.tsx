@@ -18,6 +18,9 @@ export function AuthProvider(props: { children: React.ReactNode }) {
 
     console.log(user);
 
+    console.log(user?.uid);
+    
+
     onAuthStateChanged(auth, (user) => {
         setUser(user);
     });

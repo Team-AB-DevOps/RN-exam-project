@@ -12,12 +12,6 @@ export default function UserLayout() {
                 }}
             />
             <Stack.Screen
-                name="login"
-                options={{
-                    title: "Login User",
-                }}
-            />
-            <Stack.Screen
                 name="signup"
                 options={{
                     title: "Create new user",

@@ -111,9 +111,10 @@ export default function CreateTalePage() {
     const handleSubmit = async () => {
         try {
             const taleRequest = { ...tale };
-            const coords = await getUserCoordinates();
+            const { latitude, longitude } = await getUserCoordinates();
 
-            taleRequest.coordinate = coords;
+            taleRequest.coordinate = { latitude, longitude };
+            taleRequest.date = new Date();
             taleRequest.id = await TalesEndpoint.createTale(user?.uid!, taleRequest);
 
             await uploadImage(taleRequest.id);
@@ -141,9 +142,6 @@ export default function CreateTalePage() {
             )}
             <MyTextInput label="Title" value={tale.title} onChangeText={(title) => setTale((prev) => ({ ...prev, title }))} />
             <MyTextInput label="Description" value={tale.description} onChangeText={(description) => setTale((prev) => ({ ...prev, description }))} />
-            <View className="flex justify-center items-center">
-                <DateInput value={tale.date} onChange={(date) => setTale((prev) => ({ ...prev, date }))} maximumDate={new Date()} />
-            </View>
             <View className="mb-5">
                 <Button title="Submit" onPress={handleSubmit} />
             </View>

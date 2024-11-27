@@ -1,5 +1,5 @@
 import React from "react";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import MapView, { Callout, Marker } from "react-native-maps";
 import IRegion from "../../../../models/Region";
 import * as Location from "expo-location";
@@ -19,6 +19,7 @@ export default function MapPage() {
     const { user } = useAuth();
     const [values, load, error] = useCollection(collection(database, `${user?.uid!}`));
     const markers = values?.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as ITale[];
+    const mapRef = React.useRef<MapView>(null!);
     const color = useColorScheme().colorScheme;
 
     React.useEffect(() => {
@@ -32,8 +33,7 @@ export default function MapPage() {
             }
 
             Location.getCurrentPositionAsync().then(({ coords }) => {
-                setRegion({ latitude: coords.latitude, longitude: coords.longitude, latitudeDelta: 0.3, longitudeDelta: 0.3 });
-                setLoading(false);
+                setRegion({ latitude: coords.latitude, longitude: coords.longitude, latitudeDelta: 0.7, longitudeDelta: 0.7 });
             });
         };
         // Fetcher billeder tilknyttet markers
@@ -51,24 +51,34 @@ export default function MapPage() {
 
         getUserLocation();
         fetchImageUrls();
+        setLoading(false);
     }, [user?.uid]);
 
+    const handleMapReady = React.useCallback(() => {
+        setTimeout(() => {
+            mapRef.current.animateToRegion(region!, 500);
+        }, 1000);
+    }, [region]);
+
     if (loading || load) {
-        return <ActivityIndicator className="flex-1" size="large" />;
+        return <ActivityIndicator className="flex-1" />;
     }
 
-    console.log(imagePath);
-    
 
     return (
         <View className="flex-1">
-            <MapView userInterfaceStyle={color} region={region} showsUserLocation className="w-full h-full">
+            <MapView
+                ref={mapRef}
+                onMapReady={handleMapReady}
+                mapType="hybrid"
+                loadingEnabled
+                showsMyLocationButton
+                userInterfaceStyle={color}
+                showsUserLocation
+                className="w-full h-full"
+            >
                 {markers?.map((marker) => (
-                    <Marker
-                        coordinate={{ ...marker.coordinate }}
-                        key={marker.id}
-                        onPress={() => console.log(imagePath.find((img) => img.includes(marker.id!)))}
-                    >
+                    <Marker coordinate={{ ...marker.coordinate }} key={marker.id}>
                         <Callout>
                             <View className="h-28 w-28">
                                 <Svg width={"100%"} height={"100%"}>
@@ -76,7 +86,7 @@ export default function MapPage() {
                                         width={"100%"}
                                         height={"100%"}
                                         preserveAspectRatio="xMidYMid slice"
-                                        href={{ uri: imagePath.find((img) => img.includes(String(marker.id!))) }}
+                                        href={{ uri: imagePath.find((url) => url.includes(marker.id!)) }}
                                     />
                                 </Svg>
                             </View>

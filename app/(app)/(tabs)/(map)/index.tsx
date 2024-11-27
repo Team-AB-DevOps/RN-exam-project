@@ -1,23 +1,24 @@
 import React from "react";
 import { ActivityIndicator, View } from "react-native";
-import MapView, { Callout, LongPressEvent, Marker } from "react-native-maps";
+import MapView, { Callout, Marker } from "react-native-maps";
 import IRegion from "../../../../models/Region";
-import IMarker from "../../../../models/Marker";
 import * as Location from "expo-location";
-import * as ImagePicker from "expo-image-picker";
-import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, listAll, ref } from "firebase/storage";
 import { database, storage } from "../../../../firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { collection } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { Image as ImageSvg, Svg } from "react-native-svg";
 import { useColorScheme } from "nativewind";
+import { useAuth } from "../../../../contexts/AuthContext";
+import ITale from "../../../../models/Tale";
 
 export default function MapPage() {
     const [imagePath, setImagePath] = React.useState<string[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [region, setRegion] = React.useState<IRegion | undefined>(undefined);
-    const [values, error] = useCollection(collection(database, "markers"));
-    const markers = values?.docs.map((doc) => ({ ...doc.data() })) as IMarker[];
+    const { user } = useAuth();
+    const [values, load, error] = useCollection(collection(database, `${user?.uid!}`));
+    const markers = values?.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as ITale[];
     const color = useColorScheme().colorScheme;
 
     React.useEffect(() => {
@@ -38,7 +39,7 @@ export default function MapPage() {
         // Fetcher billeder tilknyttet markers
         const fetchImageUrls = async () => {
             try {
-                const storageRef = ref(storage, `map_images/`);
+                const storageRef = ref(storage, `${user?.uid!}/`);
                 const result = await listAll(storageRef);
                 const urlPromises = result.items.map((imageRef) => getDownloadURL(imageRef));
                 const urls = await Promise.all(urlPromises);
@@ -50,73 +51,39 @@ export default function MapPage() {
 
         getUserLocation();
         fetchImageUrls();
-    }, []);
+    }, [user?.uid]);
 
-    const uploadMarker = async (newMarker: IMarker) => {
-        const { id } = await addDoc(collection(database, "markers"), newMarker);
-        return id;
-    };
+    if (loading || load) {
+        return <ActivityIndicator className="flex-1" size="large" />;
+    }
 
-    const uploadImage = async (URI: string, id: number) => {
-        const res = await fetch(URI);
-        const blob = await res.blob();
-        const imageRef = ref(storage, `map_images/image_${id}`);
+    console.log(imagePath);
+    
 
-        await uploadBytes(imageRef, blob);
-
-        // Returnerer URI for billedet i clouden
-        const downloadURL = await getDownloadURL(imageRef);
-        return downloadURL;
-    };
-
-    const handleLongPress = async (e: LongPressEvent) => {
-        e.persist();
-        const result = await ImagePicker.launchImageLibraryAsync({
-            allowsEditing: true,
-        });
-
-        if (result.canceled) {
-            return;
-        }
-
-        const URI = result.assets[0].uri;
-
-        const { latitude, longitude } = e.nativeEvent.coordinate;
-        const newMarker: IMarker = {
-            coordinate: { latitude, longitude },
-            key: e.timeStamp,
-        };
-
-        await uploadMarker(newMarker);
-        const downloadURL = await uploadImage(URI, newMarker.key);
-        setImagePath((prev) => [...prev, downloadURL]);
-    };
-
-    // Bemærk attribute 'showsUserLocation'!
     return (
         <View className="flex-1">
-            {loading ? (
-                <ActivityIndicator className="flex-1" size="large" />
-            ) : (
-                <MapView userInterfaceStyle={color} region={region} showsUserLocation onLongPress={handleLongPress} className="w-full h-full">
-                    {markers?.map((marker) => (
-                        <Marker coordinate={{ ...marker.coordinate }} key={marker.key}>
-                            <Callout>
-                                <View className="h-28 w-28">
-                                    <Svg width={"100%"} height={"100%"}>
-                                        <ImageSvg
-                                            width={"100%"}
-                                            height={"100%"}
-                                            preserveAspectRatio="xMidYMid slice"
-                                            href={{ uri: imagePath.find((i) => i.includes(String(marker.key))) }}
-                                        />
-                                    </Svg>
-                                </View>
-                            </Callout>
-                        </Marker>
-                    ))}
-                </MapView>
-            )}
+            <MapView userInterfaceStyle={color} region={region} showsUserLocation className="w-full h-full">
+                {markers?.map((marker) => (
+                    <Marker
+                        coordinate={{ ...marker.coordinate }}
+                        key={marker.id}
+                        onPress={() => console.log(imagePath.find((img) => img.includes(marker.id!)))}
+                    >
+                        <Callout>
+                            <View className="h-28 w-28">
+                                <Svg width={"100%"} height={"100%"}>
+                                    <ImageSvg
+                                        width={"100%"}
+                                        height={"100%"}
+                                        preserveAspectRatio="xMidYMid slice"
+                                        href={{ uri: imagePath.find((img) => img.includes(String(marker.id!))) }}
+                                    />
+                                </Svg>
+                            </View>
+                        </Callout>
+                    </Marker>
+                ))}
+            </MapView>
         </View>
     );
 }

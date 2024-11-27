@@ -8,16 +8,9 @@ export default function UserLayout() {
                 name="index"
                 options={{
                     title: "Profile",
-                    headerShown: false
+                    headerShown: false,
                 }}
             />
-
-            {/* <Stack.Screen
-                name="login"
-                options={{
-                    title: "Login User",
-                }}
-            /> */}
 
             <Stack.Screen
                 name="signup"

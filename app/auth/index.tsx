@@ -36,7 +36,6 @@ export default function LoginPage() {
                 <MyTextInput
                     label="E-mail"
                     returnKeyType="done"
-                    className=""
                     value={login.email}
                     onChangeText={(v) => setLogin((prev) => ({ ...prev, email: v }))}
                     textAlign="center"
@@ -45,11 +44,10 @@ export default function LoginPage() {
                 <MyTextInput
                     label="Password"
                     returnKeyType="done"
-                    className=""
                     value={login.password}
                     onChangeText={(v) => setLogin((prev) => ({ ...prev, password: v }))}
                     textAlign="center"
-                    secureTextEntry={true}
+                    secureTextEntry
                 />
 
                 <Button title="Log in" onPress={onLogin} />

@@ -11,7 +11,7 @@ import React from "react";
 import { FlatList } from "react-native-gesture-handler";
 import { CircleIconButton } from "../../../../components/Button";
 
-const tales: ITale[] = [
+const talestest: ITale[] = [
     {
         id: "1",
         title: "The Enchanted Forest",
@@ -96,7 +96,7 @@ export default function HomePage() {
     const router = useRouter();
     const [display, setDisplay] = React.useState<"list" | "grid">("grid");
     const [values, loading, error] = useCollection(collection(database, `${user!.uid}`));
-    // const tales = values?.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as ITale[];
+    const tales = values?.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as ITale[];
 
     const handleDelete = (id: string) => {
         //TODO: Delete tale by id.
@@ -113,8 +113,8 @@ export default function HomePage() {
         });
     };
 
-    const handleCamera = () => {
-        //TODO: Launch camera with location rights.
+    const handleCreate = () => {
+        router.push("create");
     };
 
     const displayIcon = display === "list" ? "th-list" : "th-large";
@@ -134,7 +134,7 @@ export default function HomePage() {
                     data={tales}
                     numColumns={2}
                     renderItem={({ item }) => <TaleGridItem key={item.id} tale={item} />}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(item) => item.id!}
                 />
             )}
 
@@ -142,11 +142,10 @@ export default function HomePage() {
                 <CircleIconButton onPress={handleChangeDisplay}>
                     <FontAwesome size={28} name={displayIcon} />
                 </CircleIconButton>
-                <CircleIconButton onPress={handleCamera}>
+                <CircleIconButton onPress={handleCreate}>
                     <FontAwesome size={28} name="plus" />
                 </CircleIconButton>
             </View>
         </View>
     );
 }
-            

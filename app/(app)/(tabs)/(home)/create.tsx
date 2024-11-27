@@ -140,8 +140,10 @@ export default function CreateTalePage() {
                     <Button title="Take a new image" onPress={handleCamera} />
                 </View>
             )}
-            <MyTextInput label="Title" value={tale.title} onChangeText={(title) => setTale((prev) => ({ ...prev, title }))} />
-            <MyTextInput label="Description" value={tale.description} onChangeText={(description) => setTale((prev) => ({ ...prev, description }))} />
+            <View className="flex items-center">
+                <MyTextInput label="Title" value={tale.title} onChangeText={(title) => setTale((prev) => ({ ...prev, title }))} />
+                <MyTextInput label="Description" value={tale.description} onChangeText={(description) => setTale((prev) => ({ ...prev, description }))} />
+            </View>
             <View className="mb-5">
                 <Button title="Submit" onPress={handleSubmit} />
             </View>

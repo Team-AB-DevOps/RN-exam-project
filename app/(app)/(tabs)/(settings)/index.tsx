@@ -8,9 +8,8 @@ export default function SettingsPage() {
 
     return (
         <View className="flex-1 justify-center items-center">
-            <Text className="text-center dark:text-red-500">Settings page</Text>
+            <Text className="pt-3 text-center text-5xl font-bold mb-8 dark:text-red-500">Settings</Text>
             <View>
-                <Text>Hello</Text>
                 <DarkModeSwitch />
                 <Button title="log out" onPress={() => auth.signOut()} />
             </View>

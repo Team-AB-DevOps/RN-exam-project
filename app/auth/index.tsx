@@ -1,14 +1,15 @@
-import { Button, TextInput, View, Text } from "react-native";
+import { Button, TextInput, View, Text, TouchableOpacity, TouchableHighlight } from "react-native";
 import React from "react";
 import { useRouter } from "expo-router";
 import { useAuth } from "../../contexts/AuthContext";
+import { MyTextInput } from "../../components/Input";
 
 const INIT_FORM = {
     email: "",
     password: "",
 };
 
-export default function UserPage() {
+export default function LoginPage() {
     const [login, setLogin] = React.useState(INIT_FORM);
     const [error, setError] = React.useState("");
     const router = useRouter();
@@ -23,37 +24,38 @@ export default function UserPage() {
             }
         } catch (error) {
             console.log("Could not login user" + error);
-            setError("Something went wrong");
+            setError("Something went wrong, try again");
         }
     };
 
     return (
-        <View className="flex-1 justify-center items-center">
-            <View className="flex-1 items-center justify-evenly">
-                <View className="mt-5">
-                    <Text className="pt-3 text-center">Login user</Text>
+        <View className="flex-1 items-center justify-evenly">
+            <View>
+                <Text className="pt-3 text-center text-5xl font-bold mb-8">Log-in</Text>
 
-                    <Text className="pt-3 text-center">Email</Text>
-                    <TextInput
-                        returnKeyType="done"
-                        className="border p-3 m-3"
-                        value={login.email}
-                        onChangeText={(v) => setLogin((prev) => ({ ...prev, email: v }))}
-                    />
+                <MyTextInput
+                    label="E-mail"
+                    returnKeyType="done"
+                    value={login.email}
+                    onChangeText={(v) => setLogin((prev) => ({ ...prev, email: v }))}
+                    textAlign="center"
+                />
 
-                    <Text className="pt-3 text-center">Password</Text>
-                    <TextInput
-                        returnKeyType="done"
-                        className="border p-3 m-3"
-                        value={login.password}
-                        onChangeText={(v) => setLogin((prev) => ({ ...prev, password: v }))}
-                    />
-                    <Button title="Submit" onPress={onLogin} />
-                </View>
+                <MyTextInput
+                    label="Password"
+                    returnKeyType="done"
+                    value={login.password}
+                    onChangeText={(v) => setLogin((prev) => ({ ...prev, password: v }))}
+                    textAlign="center"
+                    secureTextEntry
+                />
 
-                {error && <Text>{error}</Text>}
-
-                <Button title="Signup" onPress={() => router.navigate("/auth/signup")} />
+                <Button title="Log in" onPress={onLogin} />
+                {error && <Text className="text-center mt-3">{error}</Text>}
+            </View>
+            <View>
+                <Text>Don't have an account?</Text>
+                <Button title="Sign Up" onPress={() => router.navigate("/auth/signup")} />
             </View>
         </View>
     );

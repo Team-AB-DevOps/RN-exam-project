@@ -31,7 +31,9 @@ export const MyTextInput = (props: CustomTextInputProps) => {
             <TextInput
                 {...props}
                 style={{ color: theme.textStyle, backgroundColor: theme.tabBackground }}
-                className={combineClass("border p-3 m-3", props.className)}
+
+                className={combineClass("border p-3 m-3 w-56 rounded-md", props.className)}
+
                 onChangeText={changeInput}
             />
         </>

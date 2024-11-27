@@ -4,7 +4,6 @@ import { useRouter } from "expo-router";
 import { useAuth } from "../../contexts/AuthContext";
 import { MyTextInput } from "../../components/Input";
 
-
 const INIT_FORM = {
     email: "",
     password: "",
@@ -18,6 +17,11 @@ export default function SignupPage() {
     const router = useRouter();
 
     const onSignup = async () => {
+        if (signup.password !== signup.password2) {
+            setError("Passwords are not identical");
+            return;
+        }
+
         try {
             const isSuccess = await auth.signUp(signup.email, signup.password);
             setSignup(INIT_FORM);
@@ -31,36 +35,40 @@ export default function SignupPage() {
     };
 
     return (
-        <View>
-            <Text className="pt-3 text-center">Create user</Text>
+        <View className="flex-1 items-center justify-evenly">
+            <View>
+                <Text className="pt-3 text-center text-5xl font-bold mb-8">Sign Up</Text>
 
-            <MyTextInput
-                label="E-mail"
-                returnKeyType="done"
-                className="border p-3 m-3"
-                value={signup.email}
-                onChangeText={(v) => setSignup((prev) => ({ ...prev, email: v }))}
-            />
+                <MyTextInput
+                    label="E-mail"
+                    returnKeyType="done"
+                    value={signup.email}
+                    onChangeText={(v) => setSignup((prev) => ({ ...prev, email: v }))}
+                    textAlign="center"
+                />
 
-            <MyTextInput
-                returnKeyType="done"
-                label="Password"
-                secureTextEntry
-                value={signup.password}
-                onChangeText={(v) => setSignup((prev) => ({ ...prev, password: v }))}
-            />
+                <MyTextInput
+                    label="Password"
+                    returnKeyType="done"
+                    value={signup.password}
+                    onChangeText={(v) => setSignup((prev) => ({ ...prev, password: v }))}
+                    textAlign="center"
+                    secureTextEntry={true}
+                    placeholder="Minimum 6 characters"
+                />
+                <MyTextInput
+                    label="Password (Repeat)"
+                    returnKeyType="done"
+                    value={signup.password2}
+                    onChangeText={(v) => setSignup((prev) => ({ ...prev, password2: v }))}
+                    textAlign="center"
+                    secureTextEntry={true}
+                    placeholder="Minimum 6 characters"
+                />
 
-            <MyTextInput
-                returnKeyType="done"
-                label="Password (repeat)"
-                secureTextEntry
-                value={signup.password2}
-                onChangeText={(v) => setSignup((prev) => ({ ...prev, password2: v }))}
-            />
-
-            {error && <Text>{error}</Text>}
-
-            <Button title="Submit" onPress={onSignup} />
+                <Button title="Register" onPress={onSignup} />
+                {error && <Text className="text-center mt-3">{error}</Text>}
+            </View>
         </View>
     );
 }

@@ -7,6 +7,16 @@ class TalesEndpoint {
 
         return id;
     }
+
+    public static async updateTale(personId: string, taleId: string, body: TBody): Promise<void> {
+        console.log("SENDING");
+        console.log("personId: ", personId);
+        console.log("taleId: ", taleId);
+        console.log("body: ", body);
+        
+        const client = new FirebaseClient();
+        await client.Put(personId, taleId, body);
+    }
 }
 
 export default TalesEndpoint;

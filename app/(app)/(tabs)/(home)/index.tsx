@@ -103,7 +103,6 @@ export default function HomePage() {
     };
 
     const handleNavigate = (id: string) => {
-        //TODO: navigate to detailed page by id using router.
         router.push({
             pathname: "/[tale]",
             params: { id },
@@ -137,7 +136,7 @@ export default function HomePage() {
                     }}
                     data={tales}
                     numColumns={2}
-                    renderItem={({ item }) => <TaleGridItem key={item.id} tale={item} />}
+                    renderItem={({ item }) => <TaleGridItem key={item.id} tale={item} onPress={() => handleNavigate(item.id!)} />}
                     keyExtractor={(item) => item.id!}
                 />
             )}

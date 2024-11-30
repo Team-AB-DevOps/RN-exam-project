@@ -62,7 +62,7 @@ export default function TalePage() {
                     <Pressable onPress={handleEdit}>
                         <FontAwesome size={28} name="edit" color="black" />
                     </Pressable>
-                    <Pressable onPress={handleDelete}>
+                    <Pressable onLongPress={handleDelete}>
                         <FontAwesome size={28} name="remove" color="red" />
                     </Pressable>
                 </View>

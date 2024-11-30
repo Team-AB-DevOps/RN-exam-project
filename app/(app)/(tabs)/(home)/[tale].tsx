@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable } from "react-native";
+import { View, Text, Image, Pressable, ScrollView } from "react-native";
 import React from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useAuth } from "../../../../contexts/AuthContext";
@@ -51,22 +51,24 @@ export default function TalePage() {
     };
 
     return (
-        <View className="flex-1 items-center">
-            <Text>User: {user?.uid}</Text>
-            <Text>Tale Page: Tale: {id}</Text>
-            <Image className="w-36 h-36" src={imagePath} />
+        <ScrollView className="flex-1 ">
+            {/* <Text>User: {user?.uid}</Text>
+            <Text>Tale Page: Tale: {id}</Text> */}
+            <Image className="w-full h-80" src={imagePath} />
             {tale && (
-                <View>
-                    <Text>{tale.title}</Text>
-                    <Text>{tale.description}</Text>
-                    <Pressable onPress={handleEdit}>
-                        <FontAwesome size={28} name="edit" color="black" />
-                    </Pressable>
-                    <Pressable onLongPress={handleDelete}>
-                        <FontAwesome size={28} name="remove" color="red" />
-                    </Pressable>
+                <View className="mx-4">
+                    <Text className="font-extrabold text-3xl text-center my-3">{tale.title}</Text>
+                    <Text className="text-center text-lg">{tale.description}</Text>
+                    <View className="flex-1 flex-row justify-around my-4">
+                        <Pressable onPress={handleEdit}>
+                            <FontAwesome size={55} name="edit" color="black" />
+                        </Pressable>
+                        <Pressable onLongPress={handleDelete}>
+                            <FontAwesome size={55} name="remove" color="red" />
+                        </Pressable>
+                    </View>
                 </View>
             )}
-        </View>
+        </ScrollView>
     );
 }

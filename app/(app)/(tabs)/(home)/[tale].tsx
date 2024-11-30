@@ -8,6 +8,7 @@ import { useDocument } from "react-firebase-hooks/firestore";
 import { doc, getFirestore } from "firebase/firestore";
 import ITale from "../../../../models/Tale";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import TalesEndpoint from "../../../../services/TalesEndpoint";
 
 export default function TalePage() {
     const { id } = useLocalSearchParams<{ id: string }>();
@@ -40,6 +41,15 @@ export default function TalePage() {
         });
     };
 
+    const handleDelete = async () => {
+        try {
+            await TalesEndpoint.deleteTale(user?.uid!, id);
+            router.back();
+        } catch (error) {
+            console.log("Something went wrong: " + error);
+        }
+    };
+
     return (
         <View className="flex-1 items-center">
             <Text>User: {user?.uid}</Text>
@@ -51,6 +61,9 @@ export default function TalePage() {
                     <Text>{tale.description}</Text>
                     <Pressable onPress={handleEdit}>
                         <FontAwesome size={28} name="edit" color="black" />
+                    </Pressable>
+                    <Pressable onPress={handleDelete}>
+                        <FontAwesome size={28} name="remove" color="red" />
                     </Pressable>
                 </View>
             )}

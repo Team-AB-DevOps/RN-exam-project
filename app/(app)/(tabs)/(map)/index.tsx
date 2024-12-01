@@ -22,6 +22,19 @@ export default function MapPage() {
     const mapRef = React.useRef<MapView>(null!);
     const color = useColorScheme().colorScheme;
 
+    // Fetcher billeder tilknyttet markers
+    const fetchImageUrls = React.useCallback(async () => {
+        try {
+            const storageRef = ref(storage, `${user?.uid!}/`);
+            const result = await listAll(storageRef);
+            const urlPromises = result.items.map((imageRef) => getDownloadURL(imageRef));
+            const urls = await Promise.all(urlPromises);
+            setImagePath(urls);
+        } catch (error) {
+            console.error("Error fetching images:", error);
+        }
+    }, [user?.uid]);
+
     React.useEffect(() => {
         // Sætter din start region til din lokation.
         const getUserLocation = async () => {
@@ -36,23 +49,20 @@ export default function MapPage() {
                 setRegion({ latitude: coords.latitude, longitude: coords.longitude, latitudeDelta: 0.7, longitudeDelta: 0.7 });
             });
         };
-        // Fetcher billeder tilknyttet markers
-        const fetchImageUrls = async () => {
-            try {
-                const storageRef = ref(storage, `${user?.uid!}/`);
-                const result = await listAll(storageRef);
-                const urlPromises = result.items.map((imageRef) => getDownloadURL(imageRef));
-                const urls = await Promise.all(urlPromises);
-                setImagePath(urls);
-            } catch (error) {
-                console.error("Error fetching images:", error);
-            }
-        };
 
         getUserLocation();
         fetchImageUrls();
         setLoading(false);
-    }, [user?.uid]);
+    }, [user?.uid, fetchImageUrls]);
+
+    // useEffect til at fetche billeder efter første render.
+    // Timer for at undgå race condition
+    React.useEffect(() => {
+        const timer = setTimeout(() => {
+            fetchImageUrls();
+        }, 2500);
+        return () => clearTimeout(timer);
+    }, [values, fetchImageUrls]);
 
     const handleMapReady = React.useCallback(() => {
         setTimeout(() => {
@@ -63,7 +73,6 @@ export default function MapPage() {
     if (loading || load) {
         return <ActivityIndicator className="flex-1" />;
     }
-
 
     return (
         <View className="flex-1">

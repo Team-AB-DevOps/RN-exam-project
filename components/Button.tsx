@@ -15,7 +15,7 @@ export const CircleIconButton = (props: CircleIconButtonProps) => {
             {...props}
             onTouchEnd={props.onPress}
             style={{ backgroundColor: theme.tabBackground }}
-            className="flex mx-5 my-1.5 justify-center items-center w-20 h-20 border rounded-full"
+            className="flex mx-5 my-1.5 justify-center items-center w-14 h-14 border rounded-full"
         >
             {props.children}
         </View>

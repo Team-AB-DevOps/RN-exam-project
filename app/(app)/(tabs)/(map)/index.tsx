@@ -11,6 +11,7 @@ import { Image as ImageSvg, Svg } from "react-native-svg";
 import { useColorScheme } from "nativewind";
 import { useAuth } from "../../../../contexts/AuthContext";
 import ITale from "../../../../models/Tale";
+import { useRouter } from "expo-router";
 
 export default function MapPage() {
     const [imagePath, setImagePath] = React.useState<string[]>([]);
@@ -21,6 +22,7 @@ export default function MapPage() {
     const markers = values?.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as ITale[];
     const mapRef = React.useRef<MapView>(null!);
     const color = useColorScheme().colorScheme;
+    const router = useRouter();
 
     // Fetcher billeder tilknyttet markers
     const fetchImageUrls = React.useCallback(async () => {
@@ -70,6 +72,15 @@ export default function MapPage() {
         }, 1000);
     }, [region]);
 
+    const handleNavigate = (id: string) => {
+        router.navigate(
+            {
+                pathname: "/details",
+                params: { id: id },
+            }
+        );
+    };
+
     if (loading || load) {
         return <ActivityIndicator className="flex-1" />;
     }
@@ -88,7 +99,7 @@ export default function MapPage() {
             >
                 {markers?.map((marker) => (
                     <Marker coordinate={{ ...marker.coordinate }} key={marker.id}>
-                        <Callout>
+                        <Callout onPress={() => handleNavigate(marker.id!)}>
                             <View className="h-28 w-28">
                                 <Svg width={"100%"} height={"100%"}>
                                     <ImageSvg

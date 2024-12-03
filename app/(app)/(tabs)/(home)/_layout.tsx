@@ -17,6 +17,18 @@ export default function HomeLayout() {
                   title: "Create Tale",
               }}
           />
+          <Stack.Screen
+              name="[tale]"
+              options={{
+                  title: "Tale",
+              }}
+          />
+          <Stack.Screen
+              name="edit"
+              options={{
+                  title: "Edit Tale",
+              }}
+          />
       </Stack>
   );
 }

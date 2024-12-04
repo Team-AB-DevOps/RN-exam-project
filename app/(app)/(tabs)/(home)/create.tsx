@@ -1,12 +1,12 @@
-import { Button, Image, ScrollView, View, Alert } from "react-native";
-import React from "react";
+import { Button, Image, ScrollView, View, Alert, Text } from "react-native";
+import React, { useCallback, useLayoutEffect } from "react";
 import ITale from "../../../../models/Tale";
 import { DateInput, MyTextInput } from "../../../../components/Input";
 import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
 import TalesEndpoint from "../../../../services/TalesEndpoint";
 import { useAuth } from "../../../../contexts/AuthContext";
-import { useRouter } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import { storage } from "../../../../firebase";
 import { ref, uploadBytesResumable } from "firebase/storage";
 
@@ -20,8 +20,11 @@ const INIT_TALE: ITale = {
 export default function CreateTalePage() {
     const [tale, setTale] = React.useState<ITale>(INIT_TALE);
     const [imagePath, setImagePath] = React.useState("");
+    const [error, setError] = React.useState("");
     const { user } = useAuth();
     const router = useRouter();
+
+    const navigation = useNavigation();
 
     const getUserCoordinates = async () => {
         try {
@@ -42,17 +45,20 @@ export default function CreateTalePage() {
         }
     };
 
-    const uploadImage = async (name: string) => {
-        try {
-            const res = await fetch(imagePath);
-            const blob = await res.blob();
-            const storageRef = ref(storage, `${user?.uid!}/${name}`);
+    const uploadImage = useCallback(
+        async (name: string) => {
+            try {
+                const res = await fetch(imagePath);
+                const blob = await res.blob();
+                const storageRef = ref(storage, `${user?.uid!}/${name}`);
 
-            await uploadBytesResumable(storageRef, blob);
-        } catch (error) {
-            console.log("Something went wrong: " + error);
-        }
-    };
+                await uploadBytesResumable(storageRef, blob);
+            } catch (error) {
+                console.log("Something went wrong: " + error);
+            }
+        },
+        [imagePath, user?.uid],
+    );
 
     const handleCamera = async () => {
         try {
@@ -61,7 +67,7 @@ export default function CreateTalePage() {
             if (status === "granted" || granted) {
                 const result = await ImagePicker.launchCameraAsync({
                     allowsEditing: true,
-                    aspect: [3, 4]
+                    aspect: [3, 4],
                 });
 
                 if (result.canceled) return;
@@ -109,7 +115,18 @@ export default function CreateTalePage() {
         }
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = React.useCallback(async () => {
+
+                if (tale.title.length < 5) {
+                    setError("Title must be last 5 characters");
+                    return;
+                }
+
+                if (tale.description.length < 10) {
+                    setError("Description must be last 10 characters");
+                    return;
+                }
+
         try {
             const taleRequest = { ...tale };
             const { latitude, longitude } = await getUserCoordinates();
@@ -126,27 +143,45 @@ export default function CreateTalePage() {
         } catch (error) {
             console.log("Something went wrong: " + error);
         }
-    };
+    }, [router, tale, uploadImage, user]);
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => <Button onPress={handleSubmit} title="Create" disabled={!imagePath} />,
+        });
+    }, [navigation, handleSubmit]);
 
     return (
-        <ScrollView className="flex-1 dark:bg-gray-800">
+        <ScrollView className="flex-1 bg-blue-300 dark:bg-gray-800" contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}>
             {imagePath ? (
                 <View className="flex justify-evenly items-center">
-                    <Image className="h-80 w-80 mt-5" source={{ uri: imagePath }} />
+                    <Image className="size-80 mb-3 rounded-md" source={{ uri: imagePath }} />
                     <Button title="Remove" color="red" onPress={() => setImagePath("")} />
                 </View>
             ) : (
-                <View className="flex flex-row justify-evenly items-center h-60">
+                <View className="flex justify-evenly items-center h-48 pt-7">
                     <Button title="Select Image" onPress={handleAlbum} />
+                    <Text>Or</Text>
                     <Button title="Take a new image" onPress={handleCamera} />
                 </View>
             )}
-            <View className="flex items-center">
-                <MyTextInput label="Title" value={tale.title} onChangeText={(title) => setTale((prev) => ({ ...prev, title }))} />
-                <MyTextInput label="Description" value={tale.description} onChangeText={(description) => setTale((prev) => ({ ...prev, description }))} />
-            </View>
-            <View className="mb-5">
-                <Button title="Submit" onPress={handleSubmit} />
+            <View className="flex items-center mt-10">
+                <MyTextInput
+                    label="Title"
+                    value={tale.title}
+                    textAlign="center"
+                    onChangeText={(title) => setTale((prev) => ({ ...prev, title }))}
+                />
+                <MyTextInput
+                    label="Description"
+                    value={tale.description}
+                    multiline
+                    textAlignVertical="top"
+                    placeholder="Description must be at least 10 characters"
+                    className="h-32"
+                    onChangeText={(description) => setTale((prev) => ({ ...prev, description }))}
+                />
+                {error && <Text>{error}</Text>}
             </View>
         </ScrollView>
     );

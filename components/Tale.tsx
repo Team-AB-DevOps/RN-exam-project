@@ -1,4 +1,4 @@
-import { View, Text, ViewProps } from "react-native";
+import { View, Text, ViewProps, Pressable } from "react-native";
 import React from "react";
 import ITale from "../models/Tale";
 
@@ -9,20 +9,26 @@ interface TaleDisplayProps extends ViewProps {
 }
 
 export const TaleListItem = (props: TaleDisplayProps) => {
+    const { tale, onPress, ...restProps } = props;
+
     return (
-        <View {...props} className="border rounded-md m-2 p-4">
-            <Text className="font-semibold">{props.tale.title}</Text>
-            <Text className="text-sm text-gray-600">{props.tale.description}</Text>
-        </View>
+        <Pressable onPress={() => onPress && onPress(tale.id!)}>
+            <View {...restProps} className="border rounded-md m-2 p-4 bg-red-300">
+                <Text className="font-semibold">{props.tale.title}</Text>
+                <Text className="text-sm text-gray-600">{props.tale.description}</Text>
+            </View>
+        </Pressable>
     );
 };
 
 export const TaleGridItem = (props: TaleDisplayProps) => {
+    const { tale, onPress, ...restProps } = props;
+
     return (
-        <View {...props} className="border rounded-md p-2 w-[47%]">
+        <Pressable {...restProps} className="border rounded-md p-2 w-[47%]" onPress={() => onPress && onPress(tale.id!)}>
             <Text className="font-semibold">{props.tale.title}</Text>
             <Text className="text-sm text-gray-600">{props.tale.description}</Text>
-        </View>
+        </Pressable>
     );
 };
 

@@ -7,6 +7,16 @@ class TalesEndpoint {
 
         return id;
     }
+
+    public static async updateTale(personId: string, taleId: string, body: TBody): Promise<void> {
+        const client = new FirebaseClient();
+        await client.Put(personId, taleId, body);
+    }
+
+    public static async deleteTale(personId: string, taleId: string): Promise<void> {
+        const client = new FirebaseClient();
+        await client.Delete(personId, taleId);
+    }
 }
 
 export default TalesEndpoint;

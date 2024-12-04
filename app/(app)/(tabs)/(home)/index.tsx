@@ -103,7 +103,10 @@ export default function HomePage() {
     };
 
     const handleNavigate = (id: string) => {
-        //TODO: navigate to detailed page by id using router.
+        router.push({
+            pathname: "/[tale]",
+            params: { id },
+        });
     };
 
     const handleChangeDisplay = () => {
@@ -123,7 +126,7 @@ export default function HomePage() {
         <View className="flex-1">
             {display === "list" ? (
                 <ScrollView className="flex-1">
-                    {tales?.map((tale) => <TaleListItem key={tale.id} tale={tale} onSwipeRight={handleDelete} onPress={handleNavigate} />)}
+                    {tales?.map((tale) => <TaleListItem key={tale.id} tale={tale} onSwipeRight={handleDelete} onPress={() => handleNavigate(tale.id!)} />)}
                 </ScrollView>
             ) : (
                 <FlatList
@@ -133,7 +136,7 @@ export default function HomePage() {
                     }}
                     data={tales}
                     numColumns={2}
-                    renderItem={({ item }) => <TaleGridItem key={item.id} tale={item} />}
+                    renderItem={({ item }) => <TaleGridItem key={item.id} tale={item} onPress={() => handleNavigate(item.id!)} />}
                     keyExtractor={(item) => item.id!}
                 />
             )}

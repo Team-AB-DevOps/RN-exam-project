@@ -42,15 +42,6 @@ export default function TalePage() {
         });
     }, [id, router, tale]);
 
-    const handleDelete = async () => {
-        try {
-            await TalesEndpoint.deleteTale(user?.uid!, id);
-            router.back();
-        } catch (error) {
-            console.log("Something went wrong: " + error);
-        }
-    };
-
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => <Button onPress={handleEdit} title="Edit" />,
@@ -59,21 +50,12 @@ export default function TalePage() {
 
     return (
         <ScrollView className="flex-1 dark:bg-gray-800">
-            {/* <Text>User: {user?.uid}</Text>
-            <Text>Tale Page: Tale: {id}</Text> */}
             <Image className="w-full h-80" src={imagePath} />
             {tale && (
                 <View className="mx-4">
                     <Text className="font-extrabold text-3xl text-center my-3">{tale.title}</Text>
                     <Text className="text-center text-lg">{tale.description}</Text>
-                    <View className="flex-1 flex-row justify-around my-4">
-                        <Pressable onPress={handleEdit}>
-                            <FontAwesome size={55} name="edit" color="black" />
-                        </Pressable>
-                        <Pressable onLongPress={handleDelete}>
-                            <FontAwesome size={55} name="remove" color="red" />
-                        </Pressable>
-                    </View>
+                    <View className="flex-1 flex-row justify-around my-4"></View>
                 </View>
             )}
         </ScrollView>

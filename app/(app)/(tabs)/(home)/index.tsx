@@ -123,7 +123,7 @@ export default function HomePage() {
     const displayIcon = display === "list" ? "th-list" : "th-large";
 
     return (
-        <View className="flex-1">
+        <View className="flex-1 dark:bg-gray-800">
             {display === "list" ? (
                 <ScrollView className="flex-1">
                     {tales?.map((tale) => <TaleListItem key={tale.id} tale={tale} onSwipeRight={handleDelete} onPress={() => handleNavigate(tale.id!)} />)}

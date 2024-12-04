@@ -1,5 +1,5 @@
 import React from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import MapView, { Callout, Marker } from "react-native-maps";
 import IRegion from "../../../../models/Region";
 import * as Location from "expo-location";
@@ -67,10 +67,15 @@ export default function MapPage() {
     }, [values, fetchImageUrls]);
 
     const handleMapReady = React.useCallback(() => {
+        console.log("LOADED");
+        
         setTimeout(() => {
             mapRef.current.animateToRegion(region!, 500);
         }, 1000);
     }, [region]);
+
+    console.log("Hallo");
+    
 
     const handleNavigate = (id: string) => {
         router.push({
@@ -85,7 +90,7 @@ export default function MapPage() {
 
     return (
         <View className="flex-1">
-            <MapView
+            <MapView style={{width: "100%", height: "100%"}}
                 ref={mapRef}
                 onMapReady={handleMapReady}
                 mapType="hybrid"
@@ -93,7 +98,6 @@ export default function MapPage() {
                 showsMyLocationButton
                 userInterfaceStyle={color}
                 showsUserLocation
-                className="w-full h-full"
             >
                 {markers?.map((marker) => (
                     <Marker coordinate={{ ...marker.coordinate }} key={marker.id}>

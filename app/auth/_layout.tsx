@@ -1,9 +1,15 @@
 import React from "react";
 import { Stack } from "expo-router";
+import { useStyling } from "../../contexts/StyleContext";
 
 export default function UserLayout() {
+    const { theme } = useStyling();
     return (
-        <Stack>
+        <Stack
+            screenOptions={{
+                headerStyle: { backgroundColor: theme.tabBackground },
+            }}
+        >
             <Stack.Screen
                 name="index"
                 options={{

@@ -29,7 +29,7 @@ export default function LoginPage() {
     };
 
     return (
-        <View className="flex-1 items-center justify-evenly">
+        <View className="flex-1 items-center justify-evenly dark:bg-gray-800">
             <View>
                 <Text className="pt-3 text-center text-5xl font-bold mb-8">Log-in</Text>
 

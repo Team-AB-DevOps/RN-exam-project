@@ -3,11 +3,12 @@ import StyleProvider from "../contexts/StyleContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AuthProvider } from "../contexts/AuthContext";
 import * as SplashScreen from "expo-splash-screen";
+import "../global.css";
 
 // Set the animation options. This is optional.
 SplashScreen.setOptions({
-  duration: 3000,
-  fade: true,
+    duration: 3000,
+    fade: true,
 });
 
 // Vi fortæller, at vores root layout består af tabs

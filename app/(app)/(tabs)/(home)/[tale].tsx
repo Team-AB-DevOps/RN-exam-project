@@ -58,7 +58,7 @@ export default function TalePage() {
     }, [navigation, handleEdit]);
 
     return (
-        <ScrollView className="flex-1 ">
+        <ScrollView className="flex-1 dark:bg-gray-800">
             {/* <Text>User: {user?.uid}</Text>
             <Text>Tale Page: Tale: {id}</Text> */}
             <Image className="w-full h-80" src={imagePath} />

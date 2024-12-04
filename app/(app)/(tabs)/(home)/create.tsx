@@ -129,7 +129,7 @@ export default function CreateTalePage() {
     };
 
     return (
-        <ScrollView className="flex-1">
+        <ScrollView className="flex-1 dark:bg-gray-800">
             {imagePath ? (
                 <View className="flex justify-evenly items-center">
                     <Image className="h-80 w-80 mt-5" source={{ uri: imagePath }} />

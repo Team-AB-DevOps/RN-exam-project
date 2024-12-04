@@ -1,4 +1,4 @@
-import { View, Text, ViewProps, Pressable, Image } from "react-native";
+import { View, Text, ViewProps, Pressable, Image, ImageBackground } from "react-native";
 import React from "react";
 import ITale from "../models/Tale";
 import { useDocument } from "react-firebase-hooks/firestore";
@@ -41,10 +41,12 @@ export const TaleGridItem = (props: TaleDisplayProps) => {
     }, [tale.id, userId]);
 
     return (
-        <Pressable {...restProps} className="border rounded-md p-2 w-[47%]" onPress={() => onPress && onPress(tale.id!)}>
-            <Image className="w-full h-80" src={imagePath} />
-            <Text className="font-semibold">{props.tale.title}</Text>
-            <Text className="text-sm text-gray-600">{props.tale.description}</Text>
+        <Pressable {...restProps} className="w-[47%] bg-slate-200 rounded-2xl overflow-hidden shadow" onPress={() => onPress && onPress(tale.id!)}>
+            <ImageBackground className="flex justify-end w-full h-80 rounded-md" src={imagePath}>
+                <View className="bg-amber-200 h-14 p-2">
+                    <Text className="font-semibold text-2xl text-center">{props.tale.title}</Text>
+                </View>
+            </ImageBackground>
         </Pressable>
     );
 };

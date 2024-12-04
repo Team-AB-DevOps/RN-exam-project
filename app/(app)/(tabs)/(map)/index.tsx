@@ -73,12 +73,10 @@ export default function MapPage() {
     }, [region]);
 
     const handleNavigate = (id: string) => {
-        router.navigate(
-            {
-                pathname: "/details",
-                params: { id: id },
-            }
-        );
+        router.push({
+            pathname: "/[tale]",
+            params: { id },
+        });
     };
 
     if (loading || load) {

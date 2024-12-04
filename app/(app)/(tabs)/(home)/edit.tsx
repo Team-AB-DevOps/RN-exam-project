@@ -58,7 +58,7 @@ export default function EditTalePage() {
     return (
         <>
             {editedTale && (
-                <View className="flex-1 justify-evenly">
+                <View className="flex-1 justify-evenly dark:bg-gray-800">
                     <View className="flex items-center">
                         <MyTextInput
                             label="Title"

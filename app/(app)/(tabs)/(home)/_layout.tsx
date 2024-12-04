@@ -11,6 +11,7 @@ export default function HomeLayout() {
                 headerStyle: { backgroundColor: theme.tabBackground },
             }}
         >
+
             <Stack.Screen
                 name="index"
                 options={{

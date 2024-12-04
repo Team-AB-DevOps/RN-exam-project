@@ -61,6 +61,7 @@ export default function CreateTalePage() {
             if (status === "granted" || granted) {
                 const result = await ImagePicker.launchCameraAsync({
                     allowsEditing: true,
+                    aspect: [3, 4]
                 });
 
                 if (result.canceled) return;

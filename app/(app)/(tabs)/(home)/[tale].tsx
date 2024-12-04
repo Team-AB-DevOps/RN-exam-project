@@ -1,6 +1,6 @@
-import { View, Text, Image, Pressable, ScrollView } from "react-native";
-import React from "react";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { View, Text, Image, Pressable, ScrollView, Button } from "react-native";
+import React, { useLayoutEffect } from "react";
+import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { useAuth } from "../../../../contexts/AuthContext";
 import { getDownloadURL, ref } from "firebase/storage";
 import { app, storage } from "../../../../firebase";
@@ -19,6 +19,7 @@ export default function TalePage() {
         snapshotListenOptions: { includeMetadataChanges: true },
     });
     const router = useRouter();
+    const navigation = useNavigation();
 
     React.useEffect(() => {
         const fetchImage = async () => {
@@ -34,12 +35,12 @@ export default function TalePage() {
         }
     }, [id, user?.uid, value]);
 
-    const handleEdit = () => {
+    const handleEdit = React.useCallback(() => {
         router.push({
             pathname: "/edit",
             params: { tale: JSON.stringify(tale), id: id },
         });
-    };
+    }, [id, router, tale]);
 
     const handleDelete = async () => {
         try {
@@ -49,6 +50,12 @@ export default function TalePage() {
             console.log("Something went wrong: " + error);
         }
     };
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => <Button onPress={handleEdit} title="Edit" />,
+        });
+    }, [navigation, handleEdit]);
 
     return (
         <ScrollView className="flex-1 dark:bg-gray-800">

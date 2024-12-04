@@ -16,7 +16,7 @@ export default function SettingsPage() {
     }, [navigation, auth]);
 
     return (
-        <View className="flex-1 justify-between">
+        <View className="flex-1 justify-between dark:bg-gray-800">
             <View className="flex gap-y-2 mt-3">
                 <Option lable="Dark mode">
                     <DarkModeSwitch />

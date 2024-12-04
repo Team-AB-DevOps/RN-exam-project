@@ -143,10 +143,10 @@ export default function HomePage() {
 
             <View className="absolute bottom-3 right-0">
                 <CircleIconButton onPress={handleChangeDisplay}>
-                    <FontAwesome size={28} name={displayIcon} />
+                    <FontAwesome size={20} name={displayIcon} />
                 </CircleIconButton>
                 <CircleIconButton onPress={handleCreate}>
-                    <FontAwesome size={28} name="plus" />
+                    <FontAwesome size={20} name="plus" />
                 </CircleIconButton>
             </View>
         </View>

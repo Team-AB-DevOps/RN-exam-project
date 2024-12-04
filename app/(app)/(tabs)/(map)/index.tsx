@@ -1,24 +1,41 @@
 import React from "react";
-import { ActivityIndicator, View } from "react-native";
-import MapView, { Callout, LongPressEvent, Marker } from "react-native-maps";
+import { ActivityIndicator, Text, View } from "react-native";
+import MapView, { Callout, Marker } from "react-native-maps";
 import IRegion from "../../../../models/Region";
-import IMarker from "../../../../models/Marker";
 import * as Location from "expo-location";
-import * as ImagePicker from "expo-image-picker";
-import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, listAll, ref } from "firebase/storage";
 import { database, storage } from "../../../../firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { collection } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { Image as ImageSvg, Svg } from "react-native-svg";
 import { useColorScheme } from "nativewind";
+import { useAuth } from "../../../../contexts/AuthContext";
+import ITale from "../../../../models/Tale";
+import { useRouter } from "expo-router";
 
 export default function MapPage() {
     const [imagePath, setImagePath] = React.useState<string[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [region, setRegion] = React.useState<IRegion | undefined>(undefined);
-    const [values, error] = useCollection(collection(database, "markers"));
-    const markers = values?.docs.map((doc) => ({ ...doc.data() })) as IMarker[];
+    const { user } = useAuth();
+    const [values, load, error] = useCollection(collection(database, `${user?.uid!}`));
+    const markers = values?.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as ITale[];
+    const mapRef = React.useRef<MapView>(null!);
     const color = useColorScheme().colorScheme;
+    const router = useRouter();
+
+    // Fetcher billeder tilknyttet markers
+    const fetchImageUrls = React.useCallback(async () => {
+        try {
+            const storageRef = ref(storage, `${user?.uid!}/`);
+            const result = await listAll(storageRef);
+            const urlPromises = result.items.map((imageRef) => getDownloadURL(imageRef));
+            const urls = await Promise.all(urlPromises);
+            setImagePath(urls);
+        } catch (error) {
+            console.error("Error fetching images:", error);
+        }
+    }, [user?.uid]);
 
     React.useEffect(() => {
         // Sætter din start region til din lokation.
@@ -31,92 +48,70 @@ export default function MapPage() {
             }
 
             Location.getCurrentPositionAsync().then(({ coords }) => {
-                setRegion({ latitude: coords.latitude, longitude: coords.longitude, latitudeDelta: 0.3, longitudeDelta: 0.3 });
-                setLoading(false);
+                setRegion({ latitude: coords.latitude, longitude: coords.longitude, latitudeDelta: 0.7, longitudeDelta: 0.7 });
             });
-        };
-        // Fetcher billeder tilknyttet markers
-        const fetchImageUrls = async () => {
-            try {
-                const storageRef = ref(storage, `map_images/`);
-                const result = await listAll(storageRef);
-                const urlPromises = result.items.map((imageRef) => getDownloadURL(imageRef));
-                const urls = await Promise.all(urlPromises);
-                setImagePath(urls);
-            } catch (error) {
-                console.error("Error fetching images:", error);
-            }
         };
 
         getUserLocation();
         fetchImageUrls();
-    }, []);
+        setLoading(false);
+    }, [user?.uid, fetchImageUrls]);
 
-    const uploadMarker = async (newMarker: IMarker) => {
-        const { id } = await addDoc(collection(database, "markers"), newMarker);
-        return id;
-    };
+    // useEffect til at fetche billeder efter første render.
+    // Timer for at undgå race condition
+    React.useEffect(() => {
+        const timer = setTimeout(() => {
+            fetchImageUrls();
+        }, 2500);
+        return () => clearTimeout(timer);
+    }, [values, fetchImageUrls]);
 
-    const uploadImage = async (URI: string, id: number) => {
-        const res = await fetch(URI);
-        const blob = await res.blob();
-        const imageRef = ref(storage, `map_images/image_${id}`);
+    const handleMapReady = React.useCallback(() => {
+        setTimeout(() => {
+            mapRef.current.animateToRegion(region!, 500);
+        }, 1000);
+    }, [region]);
 
-        await uploadBytes(imageRef, blob);
-
-        // Returnerer URI for billedet i clouden
-        const downloadURL = await getDownloadURL(imageRef);
-        return downloadURL;
-    };
-
-    const handleLongPress = async (e: LongPressEvent) => {
-        e.persist();
-        const result = await ImagePicker.launchImageLibraryAsync({
-            allowsEditing: true,
+    const handleNavigate = (id: string) => {
+        router.push({
+            pathname: "/[tale]",
+            params: { id },
         });
-
-        if (result.canceled) {
-            return;
-        }
-
-        const URI = result.assets[0].uri;
-
-        const { latitude, longitude } = e.nativeEvent.coordinate;
-        const newMarker: IMarker = {
-            coordinate: { latitude, longitude },
-            key: e.timeStamp,
-        };
-
-        await uploadMarker(newMarker);
-        const downloadURL = await uploadImage(URI, newMarker.key);
-        setImagePath((prev) => [...prev, downloadURL]);
     };
 
-    // Bemærk attribute 'showsUserLocation'!
+    if (loading || load) {
+        return <ActivityIndicator className="flex-1" />;
+    }
+
     return (
         <View className="flex-1">
-            {loading ? (
-                <ActivityIndicator className="flex-1" size="large" />
-            ) : (
-                <MapView userInterfaceStyle={color} region={region} showsUserLocation onLongPress={handleLongPress} className="w-full h-full">
-                    {markers?.map((marker) => (
-                        <Marker coordinate={{ ...marker.coordinate }} key={marker.key}>
-                            <Callout>
-                                <View className="h-28 w-28">
-                                    <Svg width={"100%"} height={"100%"}>
-                                        <ImageSvg
-                                            width={"100%"}
-                                            height={"100%"}
-                                            preserveAspectRatio="xMidYMid slice"
-                                            href={{ uri: imagePath.find((i) => i.includes(String(marker.key))) }}
-                                        />
-                                    </Svg>
-                                </View>
-                            </Callout>
-                        </Marker>
-                    ))}
-                </MapView>
-            )}
+            <MapView
+                ref={mapRef}
+                onMapReady={handleMapReady}
+                mapType="hybrid"
+                loadingEnabled
+                showsMyLocationButton
+                userInterfaceStyle={color}
+                showsUserLocation
+                className="w-full h-full"
+            >
+                {markers?.map((marker) => (
+                    <Marker coordinate={{ ...marker.coordinate }} key={marker.id}>
+                        <Callout onPress={() => handleNavigate(marker.id!)}>
+                            <View className="h-28 w-28">
+                                <Svg width={"100%"} height={"100%"}>
+                                    <ImageSvg
+                                        width={"100%"}
+                                        height={"100%"}
+                                        preserveAspectRatio="xMidYMid slice"
+                                        href={{ uri: imagePath.find((url) => url.includes(marker.id!)) }}
+                                    />
+                                </Svg>
+                            </View>
+                        </Callout>
+                    </Marker>
+                ))}
+            </MapView>
         </View>
     );
 }

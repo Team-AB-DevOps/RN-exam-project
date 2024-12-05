@@ -4,10 +4,10 @@ import { ScrollView, Text, View } from "react-native";
 import { database } from "../../../../firebase";
 import { useAuth } from "../../../../contexts/AuthContext";
 import ITale from "../../../../models/Tale";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { TaleGridItem, TaleListItem } from "../../../../components/Tale";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import React from "react";
+import React, { useCallback } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import { CircleIconButton } from "../../../../components/Button";
 
@@ -96,7 +96,14 @@ export default function HomePage() {
     const router = useRouter();
     const [display, setDisplay] = React.useState<"list" | "grid">("grid");
     const [values, loading, error] = useCollection(collection(database, `${user!.uid}`));
-    const tales = values?.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as ITale[];
+    const [tales, setTales] = React.useState<null | ITale[]>(null);
+
+    useFocusEffect(
+        useCallback(() => {
+            const tales = values?.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as ITale[];
+            setTales(tales);
+        }, [values]),
+    );
 
     const handleDelete = (id: string) => {
         //TODO: Delete tale by id.
@@ -137,7 +144,7 @@ export default function HomePage() {
                     }}
                     data={tales}
                     numColumns={2}
-                    renderItem={({ item }) => <TaleGridItem key={item.id} tale={item} onPress={() => handleNavigate(item.id!)} />}
+                    renderItem={({ item }) => <TaleGridItem key={item.id} tale={item} userId={user?.uid} onPress={() => handleNavigate(item.id!)} />}
                     keyExtractor={(item) => item.id!}
                 />
             )}

@@ -20,8 +20,8 @@ export const TaleListItem = (props: TaleDisplayProps) => {
 
     return (
         <Pressable onPress={() => onPress && onPress(tale.id!)}>
-            <View {...restProps} className="border rounded-md m-2 p-4 bg-red-300">
-                <Text className="font-semibold">{tale.title}</Text>
+            <View {...restProps} className="border rounded-md m-2 p-4 bg-amber-200 shadow">
+                <Text className="font-semibold text-2xl">{tale.title}</Text>
                 <Text className="text-sm text-gray-600">{shortDescription}</Text>
             </View>
         </Pressable>

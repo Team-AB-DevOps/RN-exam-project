@@ -111,10 +111,9 @@ export default function HomePage() {
     };
 
     const handleChangeDisplay = () => {
-        setDisplay((prev) => {
-            if (prev === "list") return "grid";
-            return "list";
-        });
+        const displayMode = display === "grid" ? "list" : "grid";
+        
+        setDisplay(displayMode);
     };
 
     const handleCreate = () => {
@@ -146,10 +145,10 @@ export default function HomePage() {
 
                 <View className="absolute bottom-3 right-0">
                     <CircleIconButton onPress={handleChangeDisplay}>
-                        <FontAwesome size={20} name={displayIcon} />
+                        <FontAwesome size={30} name={displayIcon} />
                     </CircleIconButton>
                     <CircleIconButton onPress={handleCreate}>
-                        <FontAwesome size={20} name="plus" />
+                        <FontAwesome size={30} name="plus" />
                     </CircleIconButton>
                 </View>
             </View>

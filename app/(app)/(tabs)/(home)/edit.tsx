@@ -1,10 +1,11 @@
-import { View, Text, Button } from "react-native";
-import React, { useEffect } from "react";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { View, Text, Button, Pressable } from "react-native";
+import React, { useCallback, useEffect, useLayoutEffect } from "react";
+import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import ITale from "../../../../models/Tale";
 import TalesEndpoint from "../../../../services/TalesEndpoint";
 import { useAuth } from "../../../../contexts/AuthContext";
 import { MyTextInput } from "../../../../components/Input";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export default function EditTalePage() {
     const [editedTale, setEditedTale] = React.useState<null | ITale>(null);
@@ -12,6 +13,7 @@ export default function EditTalePage() {
     const { tale, id } = useLocalSearchParams<{ tale: string; id: string }>();
     const { user } = useAuth();
     const router = useRouter();
+    const navigation = useNavigation();
 
     useEffect(() => {
         if (tale) {
@@ -31,7 +33,16 @@ export default function EditTalePage() {
         });
     };
 
-    const handleEdit = async () => {
+    const handleDelete = async () => {
+        try {
+            await TalesEndpoint.deleteTale(user?.uid!, id);
+            router.back();
+        } catch (error) {
+            console.log("Something went wrong: " + error);
+        }
+    };
+
+    const handleEdit = useCallback(async () => {
         if (!editedTale) {
             console.log("No tale to edit");
             return;
@@ -53,7 +64,13 @@ export default function EditTalePage() {
         } catch (error) {
             console.log("Something went wrong: " + error);
         }
-    };
+    }, [editedTale, id, router, user?.uid]);
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => <Button onPress={handleEdit} title="Submit" />,
+        });
+    }, [navigation, handleEdit]);
 
     return (
         <>
@@ -77,8 +94,8 @@ export default function EditTalePage() {
                         />
                         {error && <Text>{error}</Text>}
                     </View>
-                    <View className="mb-5">
-                        <Button title="Submit" onPress={handleEdit} />
+                    <View className="flex flex-col justify-center items-center">
+                        <Button title="Delete Tale" onPress={handleDelete} color="red" />
                     </View>
                 </View>
             )}

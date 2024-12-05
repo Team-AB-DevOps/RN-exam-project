@@ -16,11 +16,13 @@ interface TaleDisplayProps extends ViewProps {
 export const TaleListItem = (props: TaleDisplayProps) => {
     const { tale, onPress, ...restProps } = props;
 
+    const shortDescription = tale.description.length > 50 ? tale.description.slice(0, 50) + "..." : tale.description;
+
     return (
         <Pressable onPress={() => onPress && onPress(tale.id!)}>
             <View {...restProps} className="border rounded-md m-2 p-4 bg-red-300">
-                <Text className="font-semibold">{props.tale.title}</Text>
-                <Text className="text-sm text-gray-600">{props.tale.description}</Text>
+                <Text className="font-semibold">{tale.title}</Text>
+                <Text className="text-sm text-gray-600">{shortDescription}</Text>
             </View>
         </Pressable>
     );

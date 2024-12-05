@@ -1,6 +1,6 @@
 import { collection } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { ScrollView, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { database } from "../../../../firebase";
 import { useAuth } from "../../../../contexts/AuthContext";
 import ITale from "../../../../models/Tale";
@@ -124,6 +124,7 @@ export default function HomePage() {
 
     return (
         <View className="flex-1 dark:bg-gray-800">
+            {!tales && <Text className="text-center font-bold text-lg mt-7">You don't have any tales, create your first one!</Text>}
             {display === "list" ? (
                 <ScrollView className="flex-1">
                     {tales?.map((tale) => <TaleListItem key={tale.id} tale={tale} onSwipeRight={handleDelete} onPress={() => handleNavigate(tale.id!)} />)}

@@ -26,10 +26,6 @@ export default function HomePage() {
         }, [values]),
     );
 
-    const handleDelete = (id: string) => {
-        //TODO: Delete tale by id.
-    };
-
     const handleNavigate = (id: string) => {
         router.push({
             pathname: "/[tale]",
@@ -39,7 +35,7 @@ export default function HomePage() {
 
     const handleChangeDisplay = () => {
         const displayMode = display === "grid" ? "list" : "grid";
-        
+
         setDisplay(displayMode);
     };
 

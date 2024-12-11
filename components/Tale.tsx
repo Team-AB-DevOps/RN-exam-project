@@ -1,14 +1,12 @@
-import { View, Text, ViewProps, Pressable, Image, ImageBackground } from "react-native";
+import { View, Text, ViewProps, Pressable, ImageBackground } from "react-native";
 import React from "react";
 import ITale from "../models/Tale";
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { useFocusEffect } from "expo-router";
-import { useDocument } from "react-firebase-hooks/firestore";
-import { doc, getFirestore } from "firebase/firestore";
-import { app, storage } from "../firebase";
+import { storage } from "../firebase";
 import { getDownloadURL, ref } from "firebase/storage";
-        
+
 interface TaleDisplayProps extends ViewProps {
     tale: ITale;
     onSwipeLeft?: (id: string) => void; // Navigate

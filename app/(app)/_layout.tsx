@@ -19,7 +19,6 @@ export default function AppLayout() {
     }, []);
 
     if (!isReady || auth.isLoading) {
-        console.log("LOADING");
         return <Loading />;
     }
 

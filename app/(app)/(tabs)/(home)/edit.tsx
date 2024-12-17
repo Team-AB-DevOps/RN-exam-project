@@ -1,11 +1,10 @@
-import { View, Text, Button, Pressable } from "react-native";
+import { View, Text, Button } from "react-native";
 import React, { useCallback, useEffect, useLayoutEffect } from "react";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import ITale from "../../../../models/Tale";
 import TalesEndpoint from "../../../../services/TalesEndpoint";
 import { useAuth } from "../../../../contexts/AuthContext";
 import { MyTextInput } from "../../../../components/Input";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export default function EditTalePage() {
     const [editedTale, setEditedTale] = React.useState<null | ITale>(null);

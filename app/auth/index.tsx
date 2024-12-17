@@ -1,4 +1,4 @@
-import { Button, TextInput, View, Text, TouchableOpacity, TouchableHighlight } from "react-native";
+import { Button, View, Text } from "react-native";
 import React from "react";
 import { useRouter } from "expo-router";
 import { useAuth } from "../../contexts/AuthContext";

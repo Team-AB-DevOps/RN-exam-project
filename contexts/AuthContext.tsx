@@ -16,11 +16,6 @@ export function AuthProvider(props: { children: React.ReactNode }) {
     const [user, setUser] = React.useState(auth.currentUser);
     const [isLoading, setIsLoading] = React.useState(false);
 
-    console.log(user);
-
-    console.log(user?.uid);
-    
-
     onAuthStateChanged(auth, (user) => {
         setUser(user);
     });

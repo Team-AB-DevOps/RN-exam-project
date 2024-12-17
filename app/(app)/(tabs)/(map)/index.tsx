@@ -67,15 +67,10 @@ export default function MapPage() {
     }, [values, fetchImageUrls]);
 
     const handleMapReady = React.useCallback(() => {
-        console.log("LOADED");
-        
         setTimeout(() => {
             mapRef.current.animateToRegion(region!, 500);
         }, 1000);
     }, [region]);
-
-    console.log("Hallo");
-    
 
     const handleNavigate = (id: string) => {
         router.push({
@@ -90,7 +85,8 @@ export default function MapPage() {
 
     return (
         <View className="flex-1">
-            <MapView style={{width: "100%", height: "100%"}}
+            <MapView
+                style={{ width: "100%", height: "100%" }}
                 ref={mapRef}
                 onMapReady={handleMapReady}
                 mapType="hybrid"

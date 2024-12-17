@@ -1,7 +1,7 @@
 import { Button, Image, ScrollView, View, Alert, Text } from "react-native";
 import React, { useCallback, useLayoutEffect } from "react";
 import ITale from "../../../../models/Tale";
-import { DateInput, MyTextInput } from "../../../../components/Input";
+import { MyTextInput } from "../../../../components/Input";
 import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
 import TalesEndpoint from "../../../../services/TalesEndpoint";
@@ -116,16 +116,15 @@ export default function CreateTalePage() {
     };
 
     const handleSubmit = React.useCallback(async () => {
+        if (tale.title.length < 5) {
+            setError("Title must be last 5 characters");
+            return;
+        }
 
-                if (tale.title.length < 5) {
-                    setError("Title must be last 5 characters");
-                    return;
-                }
-
-                if (tale.description.length < 10) {
-                    setError("Description must be last 10 characters");
-                    return;
-                }
+        if (tale.description.length < 10) {
+            setError("Description must be last 10 characters");
+            return;
+        }
 
         try {
             const taleRequest = { ...tale };
@@ -149,7 +148,7 @@ export default function CreateTalePage() {
         navigation.setOptions({
             headerRight: () => <Button onPress={handleSubmit} title="Create" disabled={!imagePath} />,
         });
-    }, [navigation, handleSubmit]);
+    }, [navigation, imagePath, handleSubmit]);
 
     return (
         <ScrollView className="flex-1 bg-blue-300 dark:bg-gray-800" contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}>
@@ -166,12 +165,7 @@ export default function CreateTalePage() {
                 </View>
             )}
             <View className="flex items-center mt-10">
-                <MyTextInput
-                    label="Title"
-                    value={tale.title}
-                    textAlign="center"
-                    onChangeText={(title) => setTale((prev) => ({ ...prev, title }))}
-                />
+                <MyTextInput label="Title" value={tale.title} textAlign="center" onChangeText={(title) => setTale((prev) => ({ ...prev, title }))} />
                 <MyTextInput
                     label="Description"
                     value={tale.description}

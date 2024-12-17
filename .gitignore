@@ -715,4 +715,6 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
+android
+
 # End of https://www.toptal.com/developers/gitignore/api/node,git,vs,reactnative,react

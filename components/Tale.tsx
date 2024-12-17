@@ -32,14 +32,14 @@ export const TaleListItem = (props: TaleDisplayProps) => {
     const panGesture = Gesture.Pan()
         .onUpdate((event) => {
             "worklet";
-            if (event.translationX < 0) {
+            if (event.translationX > 0) {
                 translateX.value = event.translationX;
             }
         })
         .onEnd(() => {
             "worklet";
-            if (translateX.value < -200) {
-                translateX.value = withSpring(-500); // Slides out of view
+            if (translateX.value > 200) {
+                translateX.value = withSpring(500); // Slides out of view
                 if (onSwipeLeft) {
                     runOnJS(onSwipeLeft)(tale.id!);
                 }

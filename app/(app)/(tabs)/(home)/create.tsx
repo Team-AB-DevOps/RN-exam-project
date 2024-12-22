@@ -1,4 +1,4 @@
-import { Button, Image, ScrollView, View, Alert, Text } from "react-native";
+import { Button, Image, ScrollView, View, Alert, Text, Keyboard, TouchableWithoutFeedback } from "react-native";
 import React, { useCallback, useLayoutEffect } from "react";
 import ITale from "../../../../models/Tale";
 import { MyTextInput } from "../../../../components/Input";
@@ -151,32 +151,35 @@ export default function CreateTalePage() {
     }, [navigation, imagePath, handleSubmit]);
 
     return (
-        <ScrollView className="flex-1 bg-blue-300 dark:bg-gray-800" contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}>
-            {imagePath ? (
-                <View className="flex justify-evenly items-center">
-                    <Image className="size-80 mb-3 rounded-md" source={{ uri: imagePath }} />
-                    <Button title="Remove" color="red" onPress={() => setImagePath("")} />
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <ScrollView className="flex-1 bg-blue-300 dark:bg-gray-800 pt-2">
+                <View className="flex items-center mt-10">
+                    <MyTextInput label="Title" value={tale.title} textAlign="center" onChangeText={(title) => setTale((prev) => ({ ...prev, title }))} />
+                    <MyTextInput
+                        label="Description"
+                        value={tale.description}
+                        multiline
+                        textAlignVertical="top"
+                        placeholder="Description must be at least 10 characters"
+                        className="h-32"
+                        onChangeText={(description) => setTale((prev) => ({ ...prev, description }))}
+                    />
+                    {error && <Text>{error}</Text>}
                 </View>
-            ) : (
-                <View className="flex justify-evenly items-center h-48 pt-7">
-                    <Button title="Select Image" onPress={handleAlbum} />
-                    <Text>Or</Text>
-                    <Button title="Take a new image" onPress={handleCamera} />
-                </View>
-            )}
-            <View className="flex items-center mt-10">
-                <MyTextInput label="Title" value={tale.title} textAlign="center" onChangeText={(title) => setTale((prev) => ({ ...prev, title }))} />
-                <MyTextInput
-                    label="Description"
-                    value={tale.description}
-                    multiline
-                    textAlignVertical="top"
-                    placeholder="Description must be at least 10 characters"
-                    className="h-32"
-                    onChangeText={(description) => setTale((prev) => ({ ...prev, description }))}
-                />
-                {error && <Text>{error}</Text>}
-            </View>
-        </ScrollView>
+                {imagePath ? (
+                    <View className="flex justify-evenly items-center">
+                        <Text className="mb-3">Image</Text>
+                        <Image className="size-80 mb-3 rounded-md" source={{ uri: imagePath }} />
+                        <Button title="Remove" color="red" onPress={() => setImagePath("")} />
+                    </View>
+                ) : (
+                    <View className="flex justify-evenly items-center h-48 pt-7">
+                        <Button title="Select Image" onPress={handleAlbum} />
+                        <Text>Or</Text>
+                        <Button title="Take a new image" onPress={handleCamera} />
+                    </View>
+                )}
+            </ScrollView>
+        </TouchableWithoutFeedback>
     );
 }

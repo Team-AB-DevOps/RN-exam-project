@@ -152,7 +152,7 @@ export default function CreateTalePage() {
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <ScrollView className="flex-1 bg-blue-300 dark:bg-gray-800 pt-2">
+            <ScrollView className="flex-1 dark:bg-gray-800 pt-2">
                 <View className="flex items-center mt-10">
                     <MyTextInput label="Title" value={tale.title} textAlign="center" onChangeText={(title) => setTale((prev) => ({ ...prev, title }))} />
                     <MyTextInput

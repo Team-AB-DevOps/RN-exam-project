@@ -1,4 +1,4 @@
-import { Button, View, Text } from "react-native";
+import { Button, View, Text, TouchableWithoutFeedback, Keyboard } from "react-native";
 import React from "react";
 import { useRouter } from "expo-router";
 import { useAuth } from "../../contexts/AuthContext";
@@ -29,34 +29,37 @@ export default function LoginPage() {
     };
 
     return (
-        <View className="flex-1 items-center justify-evenly dark:bg-gray-800">
-            <View>
-                <Text className="pt-3 text-center text-5xl font-bold mb-8">Log-in</Text>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View className="flex-1 items-center justify-evenly dark:bg-gray-800">
+                <Text className="text-center text-5xl font-bold">Log-in</Text>
+                <View>
+                    <MyTextInput
+                        label="E-mail"
+                        returnKeyType="done"
+                        value={login.email}
+                        onChangeText={(v) => setLogin((prev) => ({ ...prev, email: v }))}
+                        textAlign="center"
+                    />
 
-                <MyTextInput
-                    label="E-mail"
-                    returnKeyType="done"
-                    value={login.email}
-                    onChangeText={(v) => setLogin((prev) => ({ ...prev, email: v }))}
-                    textAlign="center"
-                />
+                    <MyTextInput
+                        label="Password"
+                        returnKeyType="done"
+                        value={login.password}
+                        onChangeText={(v) => setLogin((prev) => ({ ...prev, password: v }))}
+                        textAlign="center"
+                        secureTextEntry
+                    />
 
-                <MyTextInput
-                    label="Password"
-                    returnKeyType="done"
-                    value={login.password}
-                    onChangeText={(v) => setLogin((prev) => ({ ...prev, password: v }))}
-                    textAlign="center"
-                    secureTextEntry
-                />
-
-                <Button title="Log in" onPress={onLogin} />
-                {error && <Text className="text-center mt-3">{error}</Text>}
+                    <View className="mt-6">
+                        <Button title="Log in" onPress={onLogin} />
+                        {error && <Text className="text-center mt-3">{error}</Text>}
+                    </View>
+                </View>
+                <View>
+                    <Text>Don't have an account?</Text>
+                    <Button title="Sign Up" onPress={() => router.navigate("/auth/signup")} />
+                </View>
             </View>
-            <View>
-                <Text>Don't have an account?</Text>
-                <Button title="Sign Up" onPress={() => router.navigate("/auth/signup")} />
-            </View>
-        </View>
+        </TouchableWithoutFeedback>
     );
 }

@@ -1,4 +1,4 @@
-import { View, Text, Button } from "react-native";
+import { View, Text, Button, TouchableWithoutFeedback, Keyboard } from "react-native";
 import React, { useCallback, useEffect, useLayoutEffect } from "react";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import ITale from "../../../../models/Tale";
@@ -71,33 +71,35 @@ export default function EditTalePage() {
         });
     }, [navigation, handleEdit]);
 
+    if (!editedTale) {
+        return <></>;
+    }
+
     return (
-        <>
-            {editedTale && (
-                <View className="flex-1 justify-evenly dark:bg-gray-800">
-                    <View className="flex items-center">
-                        <MyTextInput
-                            label="Title"
-                            value={editedTale.title}
-                            onChangeText={(value) => editTale("title", value)}
-                            placeholder="Title must be at least 5 characters"
-                            textAlign="center"
-                        />
-                        <MyTextInput
-                            label="Description"
-                            value={editedTale.description}
-                            onChangeText={(value) => editTale("description", value)}
-                            placeholder="Description must be at least 10 characters"
-                            multiline
-                            maxLength={500}
-                        />
-                        {error && <Text>{error}</Text>}
-                    </View>
-                    <View className="flex flex-col justify-center items-center">
-                        <Button title="Delete Tale" onPress={handleDelete} color="red" />
-                    </View>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View className="flex-1 gap-y-10 dark:bg-gray-800">
+                <View className="flex items-center">
+                    <MyTextInput
+                        label="Title"
+                        value={editedTale.title}
+                        onChangeText={(value) => editTale("title", value)}
+                        placeholder="Title must be at least 5 characters"
+                        textAlign="center"
+                    />
+                    <MyTextInput
+                        label="Description"
+                        value={editedTale.description}
+                        onChangeText={(value) => editTale("description", value)}
+                        placeholder="Description must be at least 10 characters"
+                        multiline
+                        maxLength={500}
+                    />
+                    {error && <Text>{error}</Text>}
                 </View>
-            )}
-        </>
+                <View className="flex flex-col justify-center items-center">
+                    <Button title="Delete Tale" onPress={handleDelete} color="red" />
+                </View>
+            </View>
+        </TouchableWithoutFeedback>
     );
 }

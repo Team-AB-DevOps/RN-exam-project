@@ -35,7 +35,7 @@ export default function EditTalePage() {
     const handleDelete = async () => {
         try {
             await TalesEndpoint.deleteTale(user?.uid!, id);
-            router.back();
+            router.navigate("/");
         } catch (error) {
             console.log("Something went wrong: " + error);
         }

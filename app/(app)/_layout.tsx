@@ -1,15 +1,15 @@
 import { Redirect, Stack } from "expo-router";
 import { useAuth } from "../../contexts/AuthContext";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Loading } from "../../components/Loading";
 
-// Vi fortæller, at vores root layout består af tabs
+
 export default function AppLayout() {
-    const [isReady, setIsReady] = useState(false);
+    const [isReady, setIsReady] = React.useState(false);
     const auth = useAuth();
 
     // 1000ms delay
-    useEffect(() => {
+    React.useEffect(() => {
         const timer = setTimeout(() => {
             setIsReady(true);
         }, 1000);

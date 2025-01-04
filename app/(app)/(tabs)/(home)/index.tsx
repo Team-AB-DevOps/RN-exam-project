@@ -48,7 +48,7 @@ export default function HomePage() {
     return (
         <GestureHandlerRootView className="flex-1">
             <View className="flex-1 dark:bg-gray-800">
-                {!tales && <Text className="text-center font-bold text-lg mt-7">You don't have any tales, create your first one!</Text>}
+                {!tales && <Text className="text-center font-bold text-lg mt-7 dark:color-white">You don't have any tales, create your first one!</Text>}
                 {display === "list" ? (
                     <ScrollView className="flex-1">
                         {tales?.map((tale) => <TaleListItem key={tale.id} tale={tale} onSwipeLeft={handleNavigate} onPress={() => handleNavigate(tale.id!)} />)}

@@ -17,13 +17,13 @@ export default function SettingsPage() {
 
     return (
         <View className="flex-1 justify-between dark:bg-gray-800">
-            <View className="flex gap-y-2 mt-3">
-                <Option lable="Dark mode">
-                    <DarkModeSwitch />
+            <View className="flex gap-y-2 mt-3 ">
+                <Option lable="Dark mode" >
+                    <DarkModeSwitch  />
                 </Option>
             </View>
             <View className="mb-5">
-                <Text className="text-center">
+                <Text className="text-center dark:color-white">
                     Logged in as <Text className="font-semibold">{auth.user?.email}</Text>
                 </Text>
             </View>

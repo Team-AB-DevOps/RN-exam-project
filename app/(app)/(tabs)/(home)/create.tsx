@@ -9,6 +9,7 @@ import { useAuth } from "../../../../contexts/AuthContext";
 import { useNavigation, useRouter } from "expo-router";
 import { storage } from "../../../../firebase";
 import { ref, uploadBytesResumable } from "firebase/storage";
+import { useStyling } from "../../../../contexts/StyleContext";
 
 const INIT_TALE: ITale = {
     title: "",
@@ -23,6 +24,7 @@ export default function CreateTalePage() {
     const [error, setError] = React.useState("");
     const { user } = useAuth();
     const router = useRouter();
+    const style = useStyling()
 
     const navigation = useNavigation();
 
@@ -161,6 +163,7 @@ export default function CreateTalePage() {
                         multiline
                         textAlignVertical="top"
                         placeholder="Description must be at least 10 characters"
+                        placeholderTextColor={style.theme.textStyle}
                         className="h-32"
                         onChangeText={(description) => setTale((prev) => ({ ...prev, description }))}
                     />
@@ -175,7 +178,7 @@ export default function CreateTalePage() {
                 ) : (
                     <View className="flex justify-evenly items-center h-48 pt-7">
                         <Button title="Select Image" onPress={handleAlbum} />
-                        <Text>Or</Text>
+                        <Text className="dark:color-white">Or</Text>
                         <Button title="Take a new image" onPress={handleCamera} />
                     </View>
                 )}

@@ -51,8 +51,8 @@ export default function TalePage() {
             <Image className="w-full h-80" src={imagePath} />
             {tale && (
                 <View className="mx-4">
-                    <Text className="font-extrabold text-3xl text-center my-3">{tale.title}</Text>
-                    <Text className="text-center text-lg">{tale.description}</Text>
+                    <Text className="font-extrabold text-3xl text-center my-3 dark:color-white">{tale.title}</Text>
+                    <Text className="text-center text-lg dark:color-white">{tale.description}</Text>
                     <View className="flex-1 flex-row justify-around my-4"></View>
                 </View>
             )}

@@ -9,9 +9,9 @@ export default function HomeLayout() {
         <Stack
             screenOptions={{
                 headerStyle: { backgroundColor: theme.tabBackground },
+                headerTintColor: theme.textStyle,
             }}
         >
-
             <Stack.Screen
                 name="index"
                 options={{

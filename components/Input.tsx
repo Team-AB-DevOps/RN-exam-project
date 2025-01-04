@@ -12,7 +12,7 @@ interface LabelProps {
 }
 
 export const Label = (props: LabelProps) => {
-    return <Text className="pt-3 text-center">{props.text}</Text>;
+    return <Text className="pt-3 text-center dark:color-white">{props.text}</Text>;
 };
 
 interface CustomTextInputProps extends TextInputProps {
@@ -28,7 +28,7 @@ export const MyTextInput = (props: CustomTextInputProps) => {
 
     return (
         <>
-            {props.label && <Label text={props.label} />}
+            {props.label && <Label text={props.label}  />}
             <TextInput
                 {...props}
                 style={{ color: theme.textStyle, backgroundColor: theme.tabBackground }}
